@@ -4,12 +4,42 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const passport = require('passport');
+const flash = require('express-flash')
+const session = require('express-session')
+const methodOverride = require('method-override')
+
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/user');
+var adminRouter = require('./routes/admin');
 
 var app = express();
 
+const user = { id: '1', name: 'admin', password: '123'}
+const initializePassport = require('./passport-config');
+const { route } = require('./routes/index');
+initializePassport(
+  passport,
+  user
+ // email => users.find(user => user.email === email),
+ // id => users.find(user => user.id === id)
+)
+
+app.use(flash())
+app.use(session({
+  secret: "secret",
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+
+
+
+
+
 // view engine setup
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -20,12 +50,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/', usersRouter);
+app.use('/', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
+
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -37,5 +71,18 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = app;

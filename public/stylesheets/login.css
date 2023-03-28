@@ -1,0 +1,26 @@
+.filed {
+    padding-block: 10px;
+    width: 200px;
+}
+.btn {
+    margin-top: 20px;
+}
+
+.box {
+    border: 1px solid #a6a6a6;
+    border-radius: 10px;
+    padding: 20px;
+    padding-inline: 40px;
+    
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+.war {
+        color: #cf3a3a;
+        padding-block: 20px;
+}
