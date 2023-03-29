@@ -18,9 +18,15 @@ var app = express();
 const user = { id: '1', name: 'admin', password: '123'}
 const initializePassport = require('./passport-config');
 const { route } = require('./routes/index');
+
+var query = require('./database/queries')
+
+
+
 initializePassport(
   passport,
-  user
+  query.getUserByName,
+  query.getUserById
  // email => users.find(user => user.email === email),
  // id => users.find(user => user.id === id)
 )

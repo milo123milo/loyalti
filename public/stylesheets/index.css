@@ -2,6 +2,7 @@
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    padding: 100px;
+    margin: 100px;
     align-items: flex-end;
+    border-bottom: 1px solid #a6a6a6;
 }
