@@ -14,7 +14,24 @@ function getUserByName(name, callback) {
     callback(rows[0]);
   });
 }
+function getAllUsers(callback){
+  const sql = 'SELECT * FROM users';
+  connection.query(sql, (err, rows) => {
+    if (err) throw err;
+    callback(rows);
+  });
+
+}
+function deleteUser(id){
+  const sql = 'DELETE FROM users WHERE id = ?';
+  connection.query(sql, [id], (err, rows) => {
+    if (err) throw err;
+  });
+
+}
 module.exports = {
   getUserById,
-  getUserByName
+  getUserByName,
+  getAllUsers,
+  deleteUser
 };

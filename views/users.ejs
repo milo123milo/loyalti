@@ -16,9 +16,13 @@
 <div id="wrapper" style="margin-inline: 100px;"></div>
 
 <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
 <script>
+  var dat = <%- JSON.stringify(data) %> ;
+  var datAr = dat.map(obj => Object.values(obj))
+ 
   const myGrid = new  gridjs.Grid({
             
           columns: [
@@ -31,20 +35,28 @@
                   name: 'Actions',
                   formatter: (_, row) => {
                       const button = gridjs.h('button', {
-                          onClick: () => console.log(row.cells[0].data)
+                          onClick: () => deleteItem(row.cells[0].data)
                       }, 'Delete');
                       return gridjs.h('td', {}, button);
                   },
               },
           ],
-            data: [
-                ["John", "john@example.com", "(353) 01 222 3333"],
-                ["Mark", "mark@gmail.com", "(01) 22 888 4444"],
-                ["Eoin", "eoin@gmail.com", "0097 22 654 00033"],
-                ["Sarah", "sarahcdd@gmail.com", "+322 876 1233"],
-                ["Afshin", "afshin@mail.com", "(353) 22 87 8356"]
-            ]
+            data: datAr
         })
     myGrid.render(document.getElementById("wrapper"));
-
+     function deleteItem(id) {
+            $.ajax({
+                url: `/deleteuser/${id}`,
+                method: 'POST',
+                success: function (response) {
+                    console.log(response);
+                    location.reload()
+                },
+                error: function (error) {
+                    console.error(error);
+                    // handle error response
+                }
+            });
+        }
+    
 </script>
