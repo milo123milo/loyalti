@@ -1,10 +1,10 @@
 function admin(req, res, next) {
   
   if (req.user.role === 'admin' ) {
-     next()
+     return next()
   }
   return res.redirect('/')
  
 }
 
-module.exports = { admin }
+module.exports = {admin}

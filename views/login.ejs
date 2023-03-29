@@ -1,6 +1,8 @@
 <head>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/stylesheets/login.css" />
+  
+
 </head>
 <div class="container">
 <div class="box">
@@ -13,9 +15,14 @@
 
         <div class="filed">
         <label for="password" class="form-label">Password:</label>
-        <input type="password" id="password" name="password" class="form-control" required>
-        </div>
+       
+        <input type="password" id="password" name="password" class="form-control" >
         
+        <div class="showpass">
+        <input type="checkbox" onclick="myFunction()">
+        <div class="checktext">Show Password</div> 
+        </div>
+        </div>
         
         <button class="btn btn-primary" type="submit">Submit</button>
 
@@ -27,3 +34,13 @@
             <% } %>
 </div>
 </div>
+<script>
+    function myFunction() {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+</script>

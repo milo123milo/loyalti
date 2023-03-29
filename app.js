@@ -15,7 +15,7 @@ var adminRouter = require('./routes/admin');
 
 var app = express();
 
-const user = { id: '1', name: 'admin', password: '123'}
+
 const initializePassport = require('./passport-config');
 const { route } = require('./routes/index');
 
@@ -43,11 +43,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-routers.get('/', function(req, res, next) {
-  if(req.isAuthenticated()){
-    console.log('UserLoggediIn')
-  }
-});
+
 
 
 

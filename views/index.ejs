@@ -6,14 +6,16 @@
 
 </head>
 
-<div class="header">
-<div class="h1">Home</div>
-<div class="head-left">
-<div class="h4"><%= name %></div>
-<button id="logout-button" type="button" class="btn btn-danger">Log Out</button>
-</div>
+<%- include('comps/header', {name: name, title: 'Menu'}); %>
 
 </div>
 
-<div class="menu"></div>
+<div class="menu">
+    <div class="admin-items">
+            <% if(role === 'admin'){ %>
+                <%- include('comps/card', {admin: true,href: '/users' , link: '/images/user.svg' , title: "Users" }); %>
+            <% } %>
+    </div>
+    
+</div>
 <script src="/javascripts/logout.js"></script>

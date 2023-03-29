@@ -5,12 +5,12 @@ const passport = require('passport');
 
 /* GET home page. */
 router.get('/', auth.done, function(req, res, next) {
-  res.render('index', { name: req.user.name });
-  console.log(req.user)
+ return res.render('index', { name: req.user.name, role: req.user.role });
+  
 });
 
 router.get('/login', auth.not, function(req, res, next) {
-  res.render('login', { title: 'Login' });
+ return res.render('login', { title: 'Login' });
 });
 
 router.post('/login', auth.not, passport.authenticate('local', { 
@@ -24,7 +24,7 @@ router.get('/logout', auth.done, function(req, res) {
     if (err) {
       return next(err);
     }
-    res.redirect('/login');
+   return res.redirect('/login');
   });
 });
 

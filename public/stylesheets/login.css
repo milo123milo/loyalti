@@ -24,3 +24,15 @@
         color: #cf3a3a;
         padding-block: 20px;
 }
+.showpass {
+        padding-top: 5px;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            justify-content: flex-start;
+}
+.checktext {
+    padding-left: 4px;
+    padding-top: 5px;
+    font-size: 12px !important;
+}
