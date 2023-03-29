@@ -44,6 +44,9 @@ app.use(passport.session())
 
 
 // view engine setup
+
+
+
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
