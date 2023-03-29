@@ -3,15 +3,13 @@ const LocalStrategy = require('passport-local').Strategy
 
 function initialize(passport, getUserByName, getUserById) {
   const authenticateUser = async (name, password, done) => {
-    //const user = getUserByEmail(email)
-    var user = await new Promise((resolve, reject) => {
-    getUserByName(name, (result) => {
-      resolve(result[0]);
-    });
-  });
     
-    if (name != user.name) {
-      console.log
+      getUserByName(name, (user) => {
+     
+   
+    
+    if (!user) {
+      
       return done(null, false, { message: 'User not found' })
     }
 
@@ -24,12 +22,22 @@ function initialize(passport, getUserByName, getUserById) {
     } catch (e) {
       return done(e)
     }
+    })
   }
  
   passport.use(new LocalStrategy({ usernameField: 'username' }, authenticateUser))
-  passport.serializeUser((user, done) => done(null, user.id))
+  passport.serializeUser((user, done) => {
+    getUserByName(user.name, user => {
+      done(null, user.id) 
+    })
+    
+  })
+
   passport.deserializeUser((id, done) => {
-    return done(null, getUserByName)
+    getUserById(id, (user) => {
+        return done(null, user)
+    })
+    
   })
 }
 
