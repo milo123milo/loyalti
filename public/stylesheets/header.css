@@ -1,0 +1,22 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin: 100px;
+    align-items: flex-end;
+    border-bottom: 1px solid #a6a6a6;
+}
+
+.head-left {
+    display: flex;
+    align-items: center;
+}
+
+.btn {
+    
+       
+    margin-left: 10px;
+    height: 30px;
+    display: flex !important;
+    align-items: center !important;
+}

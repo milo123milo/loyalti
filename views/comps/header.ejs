@@ -1,4 +1,5 @@
-<link rel="stylesheet" href="/stylesheets/index.css" />
+
+
 <div class="header">
     <div class="h1"><%= title %></div>
     <div class="head-left">
@@ -7,3 +8,31 @@
         </div>
         <button id="logout-button" type="button" class="btn btn-danger">Log Out</button>
     </div>
+<style>
+    .header {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        margin: 100px;
+        align-items: flex-end;
+        border-bottom: 1px solid #a6a6a6;
+    }
+
+    .head-left {
+        display: flex;
+        align-items: center;
+    }
+
+    .btn {
+
+        margin-left: 10px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+    }
+
+    .menu {
+        display: flex;
+        margin: 100px;
+    }
+</style>
