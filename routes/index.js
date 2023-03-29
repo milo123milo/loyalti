@@ -12,11 +12,13 @@ router.get('/login', checkNotAuthenticated, function(req, res, next) {
   res.render('login', { title: 'Login' });
 });
 
-router.post('/login', checkNotAuthenticated, passport.authenticate('local', { 
+router.post('/login', checkNotAuthenticated, function(req) {
+  console.log(req.body);
+} ,passport.authenticate('local', { 
   successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true 
-}));
+  }) );
 
 router.get('/logout', checkAuthenticated, function(req, res) {
   req.logOut(function(err) {
@@ -36,10 +38,12 @@ function checkAuthenticated(req, res, next) {
 }
 
 function checkNotAuthenticated(req, res, next) {
-  
+ 
   if (req.isAuthenticated()) {
+    
     return res.redirect('/')
   }
+  
   next()
 }
 

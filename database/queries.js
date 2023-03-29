@@ -1,6 +1,6 @@
 var connection = require('./db_connection')
 
-function getUserById(id) {
+function getUserById(id, callback) {
   const sql = 'SELECT * FROM users WHERE id = ?';
   connection.query(sql, [id], (err, rows) => {
     if (err) throw err;

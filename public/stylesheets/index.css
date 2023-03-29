@@ -6,3 +6,13 @@
     align-items: flex-end;
     border-bottom: 1px solid #a6a6a6;
 }
+.head-left {
+    display:flex;
+    align-items: center;
+}
+.btn-danger {
+        display: flex;
+        margin-left: 10px;
+        height: 32px;
+        align-items: center;
+}
