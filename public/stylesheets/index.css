@@ -6,3 +6,14 @@
     align-items: flex-end;
     border-bottom: 1px solid #a6a6a6;
 }
+.head-left {
+    display: flex;
+    align-items: center;
+}
+.btn {
+  
+        margin-left: 10px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+}
