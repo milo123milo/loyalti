@@ -1,24 +1,25 @@
 var express = require('express');
+var auth = require('./rules/authCheck');
 var router = express.Router();
 const passport = require('passport');
 
 /* GET home page. */
-router.get('/', checkAuthenticated, function(req, res, next) {
+router.get('/', auth.done, function(req, res, next) {
   res.render('index', { name: req.user.name });
   console.log(req.user)
 });
 
-router.get('/login', checkNotAuthenticated, function(req, res, next) {
+router.get('/login', auth.not, function(req, res, next) {
   res.render('login', { title: 'Login' });
 });
 
-router.post('/login', checkNotAuthenticated, passport.authenticate('local', { 
+router.post('/login', auth.not, passport.authenticate('local', { 
   successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true 
 }));
 
-router.get('/logout', checkAuthenticated, function(req, res) {
+router.get('/logout', auth.done, function(req, res) {
   req.logOut(function(err) {
     if (err) {
       return next(err);
@@ -27,21 +28,7 @@ router.get('/logout', checkAuthenticated, function(req, res) {
   });
 });
 
-function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next()
-  }
 
-  res.redirect('/login')
-}
-
-function checkNotAuthenticated(req, res, next) {
-  
-  if (req.isAuthenticated()) {
-    return res.redirect('/')
-  }
-  next()
-}
 
 
 module.exports = router;
