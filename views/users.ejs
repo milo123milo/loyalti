@@ -1,11 +1,50 @@
 <link rel="stylesheet" href="/stylesheets/header.css" />
 <link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+
+
 
 <div class="header">
     <div class="h1">
         Users
     </div>
     <div class="head-left">
-        
+        <button  style="margin-bottom: 4px;" id="logout-button" type="button" class="btn btn-success">+ Create new</button>
         <button onclick="history.back()" style="margin-bottom: 4px;" id="logout-button" type="button" class="btn btn-primary">< Back</button>
     </div>
+</div>
+<div id="wrapper" style="margin-inline: 100px;"></div>
+
+<script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+
+
+<script>
+  const myGrid = new  gridjs.Grid({
+            
+          columns: [
+              { id: 'id', name: 'ID' },
+              { id: 'username', name: 'Username' },
+              { id: 'password', name: 'Password' },
+              { id: 'role', name: 'Role' },
+              {
+                  id: 'actions',
+                  name: 'Actions',
+                  formatter: (_, row) => {
+                      const button = gridjs.h('button', {
+                          onClick: () => console.log(row.cells[0].data)
+                      }, 'Delete');
+                      return gridjs.h('td', {}, button);
+                  },
+              },
+          ],
+            data: [
+                ["John", "john@example.com", "(353) 01 222 3333"],
+                ["Mark", "mark@gmail.com", "(01) 22 888 4444"],
+                ["Eoin", "eoin@gmail.com", "0097 22 654 00033"],
+                ["Sarah", "sarahcdd@gmail.com", "+322 876 1233"],
+                ["Afshin", "afshin@mail.com", "(353) 22 87 8356"]
+            ]
+        })
+    myGrid.render(document.getElementById("wrapper"));
+
+</script>
