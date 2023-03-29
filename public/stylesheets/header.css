@@ -1,4 +1,5 @@
 .header {
+
     display: flex;
     justify-content: space-between;
     flex-direction: row;
@@ -10,13 +11,30 @@
 .head-left {
     display: flex;
     align-items: center;
+    padding-bottom: 5px;
+}
+.name {
+    padding-right: 15px;
+    margin: 0 !important;
 }
 
-.btn {
+.bt {
     
-       
+    flex-direction: row;
     margin-left: 10px;
-    height: 30px;
+   
     display: flex !important;
     align-items: center !important;
+}
+
+.modal {
+    overflow-y: auto;
+}
+
+.modal-open {
+    overflow: auto;
+}
+
+.modal-open[style] {
+    padding-right: 0px !important;
 }

@@ -14,6 +14,14 @@ router.get('/users', auth.done, role.admin, function(req, res, next) {
   
   
 });
+router.post('/users', auth.done, role.admin, function(req, res, next) {
+ const { username, password, role } = req.body;
+ pool.createUser(username, password, role)
+ 
+ res.redirect('/users')
+  
+  
+});
 router.post('/deleteuser/:id',auth.done, role.admin, (req, res) => {
   const id = req.params.id;
   pool.deleteUser(id)
