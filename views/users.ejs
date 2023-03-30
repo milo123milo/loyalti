@@ -40,6 +40,8 @@
 
 
 <!-- Modal -->
+
+
 <div class="modal fade in" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -77,6 +79,47 @@
     </div>
 </div>
 
+<div class="modal fade in" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit user</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-userform" class="formm" action="/editusers" method="POST">
+                    <div class="filed">
+                        <label for="id" class="form-label">ID:</label>
+                        <input type="text" id="edit-id" name="id" class="form-control" readonly>
+                    </div>
+                    <div class="filed">
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" id="edit-username" name="username" class="form-control" required>
+                    </div>
+                    <div class="filed">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="text" id="edit-password" name="password" class="form-control">
+                    </div>
+                    <div class="filed">
+                        <label for="role" class="form-label">Role:</label>
+                        <input type="text" id="edit-role" name="role" class="form-control">
+                    </div>
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button onclick="document.getElementById('edit-userform').submit();" type="button"
+                    class="btn btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -97,10 +140,17 @@
                   name: 'Actions',
                   formatter: (_, row) => {
                       const button = gridjs.h('button', {
-                        class: 'btn btn-danger'  ,
+                        class: 'btn btn btn-danger'  ,
                         onClick: () => deleteItem(row.cells[0].data)
                       }, 'Delete');
-                      return gridjs.h('td', {}, button);
+                      const buttonEdit = gridjs.h('button', {
+                          class: 'btn btn btn-success',
+                          style: 'margin-left: 10px;',
+                          'data-toggle': "modal" , 
+                          'data-target': "#editModal",
+                          onClick: () => editItem(row.cells)
+                      }, 'Edit');
+                      return gridjs.h('td', {}, button, buttonEdit);
                   },
               },
           ],
@@ -124,5 +174,11 @@
                 }
             });
         }
+    function editItem(data){
+        document.getElementById("edit-id").value = data[0].data
+        document.getElementById("edit-username").value = data[1].data
+        document.getElementById("edit-password").value = data[2].data
+        document.getElementById("edit-role").value = data[3].data
+    }
     
 </script>

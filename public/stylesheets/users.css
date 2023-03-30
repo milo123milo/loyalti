@@ -2,5 +2,9 @@
      padding-bottom: 20px;
  }
  .formm {
-    padding-top: 20px;
+    padding-top: 15px;
+ }
+ .modal-body {
+    padding-inline: 1rem;
+    padding-block: 0 !important;
  }

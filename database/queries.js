@@ -30,9 +30,17 @@ function deleteUser(id){
 }
 
 function createUser(username, password, role) {
-  console.log('sql')
   const sql = 'INSERT INTO users (name, password, role) VALUES (?, ?, ?)';
   connection.query(sql, [username, password, role], (err, rows) => {
+    if (err) throw err;
+  });
+}
+
+function editUser(id, username, password, role) {
+  const sql = `UPDATE users
+SET name = ?, password = ?, role = ?
+WHERE id = ?;`
+connection.query(sql, [username, password, role, id], (err, rows) => {
     if (err) throw err;
   });
 }
@@ -43,5 +51,6 @@ module.exports = {
   getUserByName,
   getAllUsers,
   deleteUser,
-  createUser
+  createUser,
+  editUser
 };
