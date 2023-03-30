@@ -4,6 +4,9 @@ var auth = require('./rules/authCheck');
 var role = require('./rules/roleCheck')
 var pool = require('../database/queries')
 
+//Add routes below
+
+
 router.get('/admin', role.admin, auth.done, function(req, res, next) {
   return res.render('admin');
 });

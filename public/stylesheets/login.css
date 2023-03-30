@@ -13,6 +13,7 @@ label {
     margin-bottom: 0 !important;
 }
 .box {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     background-color: white;
     border: 1px solid #a6a6a6;
     border-radius: 10px;
@@ -44,6 +45,6 @@ label {
     font-size: 12px !important;
 }
 body {
-    background-image: url("/images/background.jpg");
-    background-repeat: repeat;
+   /* background-image: url("/images/background.jpg");
+    background-repeat: repeat; */
 }

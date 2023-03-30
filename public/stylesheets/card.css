@@ -8,7 +8,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-}
+    transition: box-shadow 0.2s cubic-bezier(0.18, 0.89, 0.29, 0.93);
+    }
+
 .title {
     font-size: 18px;
     color: #505050;

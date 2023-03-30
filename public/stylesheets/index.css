@@ -4,4 +4,10 @@
     display: flex;
     margin: 100px;
 }
+a {
+    color: inherit !important;
+    /* blue colors for links too */
+    text-decoration: none !important;
+    /* no underline */
+}
 
