@@ -11,7 +11,7 @@ npm run devstart
 View:
 localhost:3000
 
-*TODO: hash passwords
+*TODO: hash passwords*
 
 ## How to use user roles(admin, user, ...)
 
