@@ -17,8 +17,10 @@ router.get('/users', auth.done, role.admin, function(req, res, next) {
 });
 router.post('/users', auth.done, role.admin, function(req, res, next) {
  const { username, password, role } = req.body;
- 
-  if(username === 'root'){
+  if(username === '' || password === '' || role === '' ){
+     const message = "All fields are required!";
+     res.redirect(`/users?message=${encodeURIComponent(message)}`);
+  }else if(username === 'root'){
      const message = "Username 'root' is forbbiden!";
      res.redirect(`/users?message=${encodeURIComponent(message)}`);
  }else {
@@ -29,7 +31,10 @@ router.post('/users', auth.done, role.admin, function(req, res, next) {
 });
 router.post('/editusers', auth.done, role.admin, function(req, res, next) {
  const { id, username, password, role } = req.body;
- if(username === 'root'){
+   if(username === '' || password === '' || role === '' ){
+     const message = "All fields are required!";
+     res.redirect(`/users?message=${encodeURIComponent(message)}`);
+  }else if(username === 'root'){
      const message = "Username 'root' is forbbiden!";
      res.redirect(`/users?message=${encodeURIComponent(message)}`);
  }else {

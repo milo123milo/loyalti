@@ -29,7 +29,7 @@
     </div>
     <div class="head-left">
         <button  style="margin-bottom: 4px;" id="logout-button" type="button" class=" bt btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">+ Create new</button>
-        <button onclick="history.back()" style="margin-bottom: 4px;" id="logout-button" type="button" class="bt btn btn-primary">< Back</button>
+        <button onclick="window.location='/'" style="margin-bottom: 4px;" id="logout-button" type="button" class="bt btn btn-primary">< Back</button>
     </div>
 </div>
 <% if (message) { %>
@@ -62,11 +62,11 @@
                     </div>
                     <div class="filed">
                         <label for="password" class="form-label">Password:</label>
-                        <input type="text" id="password" name="password" class="form-control">
+                        <input type="text" id="password" name="password" class="form-control" required>
                     </div>
                     <div class="filed">
                         <label for="role" class="form-label">Role:</label>
-                        <input type="text" id="role" name="role" class="form-control">
+                        <input type="text" id="role" name="role" class="form-control" required>
                     </div>
                 
                     
@@ -75,7 +75,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button  onclick="document.getElementById('userform').submit();" type="button" class="btn btn-primary">Create</button>
+                <button type="submit"  onclick="document.getElementById('userform').submit();" type="button" class="btn btn-primary">Create</button>
             </div>
         </div>
     </div>
@@ -104,11 +104,11 @@
                     </div>
                     <div class="filed">
                         <label for="password" class="form-label">Password:</label>
-                        <input type="text" id="edit-password" name="password" class="form-control">
+                        <input type="text" id="edit-password" name="password" class="form-control" required>
                     </div>
                     <div class="filed">
                         <label for="role" class="form-label">Role:</label>
-                        <input type="text" id="edit-role" name="role" class="form-control">
+                        <input type="text" id="edit-role" name="role" class="form-control" required>
                     </div>
 
 
@@ -117,7 +117,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button onclick="document.getElementById('edit-userform').submit();" type="button"
+                <button type="submit" onclick="document.getElementById('edit-userform').submit();" type="button"
                     class="btn btn-primary">Confirm</button>
             </div>
         </div>
