@@ -11,6 +11,8 @@ npm run devstart
 View:
 localhost:3000
 
+*TODO: hash passwords
+
 ## How to use user roles(admin, user, ...)
 
 Admin protected routes are at folder: './routes/'
