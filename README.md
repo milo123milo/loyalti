@@ -17,7 +17,7 @@ Admin protected routes are at folder: './routes/'
 
 User routes are unprotected and anyone who is logged can acces them.
 
-#### How to add role protected routes?
+### How to add role protected routes?
 
 **role.admin** check if user is admin
 
@@ -41,7 +41,7 @@ router.get('/someroute', auth.done, function(req, res, next) {
 });
 ```
 
-#### How to add role depended element rendering
+### How to add role depended element rendering
 
 Pass user role to render in your routes file. For example '.routes/index.js'
 
@@ -62,7 +62,7 @@ Then at your view folder add the folowing. For example './views/index.ejs'
 </div>
 ```
 
-#### How to add new roles?
+### How to add new roles?
 
 At folder '.routes/rules/roleCheck.js' add function to check role parameter.
 
