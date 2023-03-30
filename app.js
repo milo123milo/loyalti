@@ -12,9 +12,10 @@ const methodOverride = require('method-override')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
-
+var initDB = require('./database/init')
 var app = express();
 
+initDB.initDatabase();
 
 const initializePassport = require('./passport-config');
 const { route } = require('./routes/index');
