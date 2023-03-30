@@ -8,3 +8,8 @@
     padding-inline: 1rem;
     padding-block: 0 !important;
  }
+
+ .popup {
+    margin-inline: 104px;
+    color: #dc3545;
+ }

@@ -8,26 +8,35 @@ router.get('/admin', role.admin, auth.done, function(req, res, next) {
   return res.render('admin');
 });
 router.get('/users', auth.done, role.admin, function(req, res, next) {
+  const { message } = req.query;
   pool.getAllUsers(it => {
-    return res.render('users', {data: it}); 
+    return res.render('users', {message, data: it}); 
   })
   
   
 });
 router.post('/users', auth.done, role.admin, function(req, res, next) {
  const { username, password, role } = req.body;
- pool.createUser(username, password, role)
  
+  if(username === 'root'){
+     const message = "Username 'root' is forbbiden!";
+     res.redirect(`/users?message=${encodeURIComponent(message)}`);
+ }else {
+ pool.createUser(username, password, role)
  res.redirect('/users')
-  
+ }
   
 });
 router.post('/editusers', auth.done, role.admin, function(req, res, next) {
  const { id, username, password, role } = req.body;
+ if(username === 'root'){
+     const message = "Username 'root' is forbbiden!";
+     res.redirect(`/users?message=${encodeURIComponent(message)}`);
+ }else {
+
  pool.editUser(id, username, password, role)
- 
  res.redirect('/users')
-  
+  }
   
 });
 router.post('/deleteuser/:id',auth.done, role.admin, (req, res) => {

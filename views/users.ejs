@@ -16,11 +16,7 @@
     
     <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
 
-<!-- jQuery -->
 
-
-
-<!-- Button trigger modal -->
 
 
 
@@ -36,6 +32,12 @@
         <button onclick="history.back()" style="margin-bottom: 4px;" id="logout-button" type="button" class="bt btn btn-primary">< Back</button>
     </div>
 </div>
+<% if (message) { %>
+    <div class="popup h6">
+        <%= message %>
+    </div>
+    <% } %>
+
 <div id="wrapper" style="margin-inline: 100px;"></div>
 
 
@@ -53,7 +55,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="userform" class="formm" action="/users" method="POST">
+                <form  id="userform" class="formm" action="/users" method="POST">
                     <div class="filed">
                         <label for="username" class="form-label">Username:</label>
                         <input type="text" id="username" name="username" class="form-control" required>
@@ -73,7 +75,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button onclick="document.getElementById('userform').submit();" type="button" class="btn btn-primary">Create</button>
+                <button  onclick="document.getElementById('userform').submit();" type="button" class="btn btn-primary">Create</button>
             </div>
         </div>
     </div>
@@ -90,7 +92,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="edit-userform" class="formm" action="/editusers" method="POST">
+                
+                <form  id="edit-userform" class="formm" action="/editusers" method="POST">
                     <div class="filed">
                         <label for="id" class="form-label">ID:</label>
                         <input type="text" id="edit-id" name="id" class="form-control" readonly>
@@ -180,5 +183,19 @@
         document.getElementById("edit-password").value = data[2].data
         document.getElementById("edit-role").value = data[3].data
     }
+    function checkInput() {
+            var userInput = document.getElementById("username").value;
+            var myForm = document.getElementById("userform");
+        myForm.addEventListener("submit", function () {
+            return checkInput();
+        })
+            if (userInput.toLowerCase() === "root") {
+                alert("Please choose a different username.");
+                return false;
+            }
+
+            return true;
+            
+        }
     
 </script>
