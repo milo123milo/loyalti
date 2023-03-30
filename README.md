@@ -1,6 +1,8 @@
 # loyalti
 
-MySQL: db_name: auth, Table: users, Fields: id(auto increment), name, password, role
+Root user is created on init, it cant be created od edited from UI or API. 
+
+username: root, password: root
 
 Start:
 npm install,
