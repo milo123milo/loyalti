@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const user = require('./root')
 
 // MySQL connection configuration
 const connection = mysql.createConnection({
@@ -39,8 +40,8 @@ function initDatabase(){
 
         const addAdmin = `
         INSERT INTO users (name, password, role) 
-        SELECT 'admin', 'admin', 'admin'
-        WHERE NOT EXISTS (SELECT * FROM users WHERE name = 'admin');`
+        SELECT '${user.user.name}', '${user.user.password}', '${user.user.role}'
+        WHERE NOT EXISTS (SELECT * FROM users WHERE name = 'root');`
         connection.query(addAdmin, (err) => {
             if(err) throw err;
             console.log('Root admin user crearted')

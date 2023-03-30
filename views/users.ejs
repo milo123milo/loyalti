@@ -83,7 +83,8 @@
 <script>
   var dat = <%- JSON.stringify(data) %> ;
   var datAr = dat.map(obj => Object.values(obj))
- 
+  datAr = datAr.filter(item => item[1] !== 'root');
+
   const myGrid = new  gridjs.Grid({
             
           columns: [
@@ -103,8 +104,11 @@
                   },
               },
           ],
-            data: datAr
+            data: datAr,
+            search: true,
+  
         })
+    
     myGrid.render(document.getElementById("wrapper"));
      function deleteItem(id) {
             $.ajax({
