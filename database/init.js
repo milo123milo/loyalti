@@ -47,6 +47,23 @@ function initDatabase(){
             console.log('Root admin user crearted')
         })
 
+        const createClientsTable = `
+            CREATE TABLE IF NOT EXISTS clients (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                name TEXT,
+                discount INT,
+                type VARCHAR(255),
+                pib INT DEFAULT NULL,
+                address TEXT
+                );
+            
+
+            `;
+        connection.query(createClientsTable, (err) => {
+            if (err) throw err;
+            console.log('Clients table checked/created');
+        });
+
         });
     });
     });
