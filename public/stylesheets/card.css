@@ -2,6 +2,7 @@
     display: flex;
     height: 143px;
     width: 135px;
+    margin-right: 20px;
     padding-block: 20px;
     border: 1px solid #a6a6a6;
     border-radius: 10px;

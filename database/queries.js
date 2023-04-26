@@ -45,6 +45,34 @@ connection.query(sql, [username, password, role, id], (err, rows) => {
   });
 }
 
+function getAllClients(callback){
+  const sql = 'SELECT * FROM clients';
+  connection.query(sql, (err, rows) => {
+    if (err) throw err;
+    callback(rows);
+  });
+}
+function deleteClient(id){
+  const sql = 'DELETE FROM clients WHERE id = ?';
+  connection.query(sql, [id], (err, rows) => {
+    if (err) throw err;
+  });
+}
+function createClient(name, discount, type, pib, address) {
+  const sql = 'INSERT INTO clients (name, discount, type, pib, address) VALUES (?, ?, ?, ?, ?)';
+  connection.query(sql, [name, discount, type, pib, address], (err, rows) => {
+    if (err) throw err;
+  });
+}
+function editClient(id, name, discount, type, pib, address) {
+  const sql = `UPDATE clients
+SET name = ?, discount = ?, type = ?, pib = ?, address = ?
+WHERE id = ?;`
+connection.query(sql, [name, discount, type, pib, address, id], (err, rows) => {
+    if (err) throw err;
+  });
+}
+
 
 module.exports = {
   getUserById,
@@ -52,5 +80,9 @@ module.exports = {
   getAllUsers,
   deleteUser,
   createUser,
-  editUser
+  editUser,
+  getAllClients,
+  deleteClient,
+  createClient,
+  editClient
 };

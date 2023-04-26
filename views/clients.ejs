@@ -25,7 +25,7 @@
 
 <div class="header">
     <div class="h1">
-        Users
+        Clients
     </div>
     <div class="head-left">
         <button  style="margin-bottom: 4px;" id="logout-button" type="button" class=" bt btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">+ Create new</button>
@@ -55,24 +55,32 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form  id="userform" class="formm" action="/users" method="POST">
+                <form  id="userform" class="formm" action="/clients" method="POST">
                     <div class="filed">
-                        <label for="username" class="form-label">Username:</label>
-                        <input type="text" id="username" name="username" class="form-control" required>
+                        <label for="username" class="form-label">Name:</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="password" class="form-label">Password:</label>
-                        <input type="text" id="password" name="password" class="form-control" required>
+                        <label for="password" class="form-label">Discount [%]:</label>
+                        <input type="text" id="discount" name="discount" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="role" class="form-label">Role:</label>
-                        <select id="role" name="role" class="form-control" required>
+                        <label for="role" class="form-label">Type:</label>
+                        <select id="type" name="type" class="form-control" required>
                             <% types.forEach(function(type) { %>
                                 <option value="<%= type %>">
                                     <%= type %>
                                 </option>
                                 <% }); %>
                         </select>
+                    </div>
+                    <div class="filed">
+                        <label for="role" class="form-label">PIB:</label>
+                        <input type="text" id="pib" name="pib" class="form-control" required>
+                    </div>
+                    <div class="filed">
+                        <label for="role" class="form-label">Address:</label>
+                        <input type="text" id="address" name="address" class="form-control" required>
                     </div>
                 
                     
@@ -92,35 +100,43 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Edit user</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit client</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 
-                <form  id="edit-userform" class="formm" action="/editusers" method="POST">
+                <form  id="edit-userform" class="formm" action="/editclient" method="POST">
                     <div class="filed">
                         <label for="id" class="form-label">ID:</label>
                         <input type="text" id="edit-id" name="id" class="form-control" readonly>
                     </div>
                     <div class="filed">
-                        <label for="username" class="form-label">Username:</label>
-                        <input type="text" id="edit-username" name="username" class="form-control" required>
+                        <label for="username" class="form-label">Name:</label>
+                        <input type="text" id="edit-name" name="name" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="password" class="form-label">Password:</label>
-                        <input type="text" id="edit-password" name="password" class="form-control" required>
+                        <label for="password" class="form-label">Discount [%]:</label>
+                        <input type="text" id="edit-discount" name="discount" class="form-control" required>
                     </div>
-                    <div class="filed">
-                        <label for="role" class="form-label">Role:</label>
-                        <select id="edit-role" name="role" class="form-control" required>
+                    <div class="field">
+                        <label for="role" class="form-label">Type:</label>
+                        <select id="edit-type" name="type" class="form-control" required>
                             <% types.forEach(function(type) { %>
                                 <option value="<%= type %>">
                                     <%= type %>
                                 </option>
                                 <% }); %>
                         </select>
+                    </div>
+                    <div class="filed">
+                        <label for="role" class="form-label">PIB:</label>
+                        <input type="text" id="edit-pib" name="pib" class="form-control" required>
+                    </div>
+                    <div class="filed">
+                        <label for="role" class="form-label">Address:</label>
+                        <input type="text" id="edit-address" name="address" class="form-control" required>
                     </div>
 
 
@@ -141,15 +157,17 @@
 <script>
   var dat = <%- JSON.stringify(data) %> ;
   var datAr = dat.map(obj => Object.values(obj))
-  datAr = datAr.filter(item => item[1] !== 'root');
+ // datAr = datAr.filter(item => item[1] !== 'root');
 
   const myGrid = new  gridjs.Grid({
             
           columns: [
               { id: 'id', name: 'ID' },
-              { id: 'username', name: 'Username' },
-              { id: 'password', name: 'Password' },
-              { id: 'role', name: 'Role' },
+              { id: 'name', name: 'Name' },
+              { id: 'discount', name: 'Discount' },
+              { id: 'type', name: 'Type' },
+              { id: 'pib', name: 'PIB' },
+              { id: 'address', name: 'Address' },
               {
                   id: 'actions',
                   name: 'Actions',
@@ -177,7 +195,7 @@
     myGrid.render(document.getElementById("wrapper"));
      function deleteItem(id) {
             $.ajax({
-                url: `/deleteuser/${id}`,
+                url: `/deleteclient/${id}`,
                 method: 'POST',
                 success: function (response) {
                     console.log(response);
@@ -191,9 +209,11 @@
         }
     function editItem(data){
         document.getElementById("edit-id").value = data[0].data
-        document.getElementById("edit-username").value = data[1].data
-        document.getElementById("edit-password").value = data[2].data
-        document.getElementById("edit-role").value = data[3].data
+        document.getElementById("edit-name").value = data[1].data
+        document.getElementById("edit-discount").value = data[2].data
+        document.getElementById("edit-type").value = data[3].data
+        document.getElementById("edit-pib").value = data[4].data
+        document.getElementById("edit-address").value = data[5].data
     }
     function checkInput() {
             var userInput = document.getElementById("username").value;

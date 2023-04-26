@@ -11,3 +11,7 @@ a {
     /* no underline */
 }
 
+.admin-items {
+    display: flex;
+    flex-direction: row-reverse;
+}

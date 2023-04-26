@@ -14,6 +14,10 @@
             <% if(role === 'admin'){ %>
                 <%- include('comps/card', {admin: true,href: '/users' , link: '/images/user.svg' , title: "Users" }); %>
             <% } %>
+
+            <% if(role==='admin' ){ %>
+                <%- include('comps/card', {admin: true, href: '/clients' , link: '/images/clients.svg' , title: "Clients" }); %>
+            <% } %>
     </div>
     
 </div>
