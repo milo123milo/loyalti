@@ -52,13 +52,20 @@ function getAllClients(callback){
     callback(rows);
   });
 }
+function getClientById(id, callback){
+  const sql = 'SELECT * FROM clients WHERE id = ?';
+  connection.query(sql, [id], (err, rows) => {
+    callback(rows, err);
+    
+  });
+}
 function deleteClient(id){
   const sql = 'DELETE FROM clients WHERE id = ?';
   connection.query(sql, [id], (err, rows) => {
     if (err) throw err;
   });
 }
-function createClient(name, discount, type, pib, address) {
+function createClient(id, name, discount, type, pib, address) {
   const sql = 'INSERT INTO clients (name, discount, type, pib, address) VALUES (?, ?, ?, ?, ?)';
   connection.query(sql, [name, discount, type, pib, address], (err, rows) => {
     if (err) throw err;
@@ -73,6 +80,149 @@ connection.query(sql, [name, discount, type, pib, address, id], (err, rows) => {
   });
 }
 
+function getClientReceipts(id, callback){
+  const sql = 'SELECT * FROM receipts WHERE ClientID  = ?';
+  connection.query(sql, [id], (err, rows) => {
+    if (err) throw err;
+    callback(rows) 
+  });
+}
+function createClientReceipts(ID, IIC, Date, Total, TotalVAT, Discount, ClientID, callback) {
+  const sql = 'INSERT INTO receipts (ID, IIC, Date, Total, TotalVAT, Discount, ClientID) VALUES (?, ?, ?, ?, ?, ?, ?)';
+  connection.query(sql, [ID, IIC, Date, Total, TotalVAT, Discount, ClientID], (err, rows) => {
+    callback(err)
+    
+  });
+}
+function getReceiptItems(id, callback){
+  const sql = 'SELECT * FROM receiptitems WHERE ReceiptID  = ?';
+  connection.query(sql, [id], (err, rows) => {
+    if (err) throw err;
+    callback(rows) 
+  });
+}
+function createReceiptItem(ReceiptID, Name, Quantity, Unit, PricePerPiece, PriceTotal, PriceTotalVAT, Discount, Total) {
+  const sql = 'INSERT INTO receiptitems (ReceiptID, Name, Quantity, Unit, PricePerPiece, PriceTotal, PriceTotalVAT, Discount, Total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+  connection.query(sql, [ReceiptID, Name, Quantity, Unit, PricePerPiece, PriceTotal, PriceTotalVAT, Discount, Total], (err, rows) => {
+    if (err) throw err;
+  });
+}
+
+function getClientReceiptTotals(clientID, startDate, endDate, callback) {
+  const sql = `SELECT 
+                  SUM(Total) AS TotalSum, 
+                  SUM(TotalVAT) AS TotalVATSum, 
+                  SUM(TotalVat - (TotalVat/100)*Discount) AS TotalDiscountedSum,
+                  DATE(Date) AS DatePoint
+              FROM receipts
+              WHERE 
+                  ClientID = ?
+                  AND Date >= ?
+                  AND Date <= ?
+              GROUP BY DatePoint;`;
+  const values = [clientID, startDate, endDate];
+  connection.query(sql, values, (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+      const totals = result
+      callback(null, totals);
+    }
+  });
+}
+function getClientReceiptItems(clientID, startDate, endDate, callback) {
+  const sql = `SELECT 
+                  ri.Name,
+                  SUM(ri.Quantity) AS TotalQuantity,
+                  SUM(ri.PriceTotal) AS TotalPrice,
+                  AVG(ri.PricePerPiece) AS PricePerPiece,
+                  SUM(ri.PriceTotalVAT) AS TotalPriceVAT,
+                  ri.Discount,
+                  SUM(ri.Total) AS TotalDisc
+               FROM 
+                  receiptitems ri
+                  INNER JOIN receipts r ON ri.ReceiptID = r.ID
+               WHERE 
+                  r.ClientID = ?
+                  AND r.Date >= ?
+                  AND r.Date <= ?
+               GROUP BY 
+                  ri.Name`;
+  const values = [clientID, startDate, endDate];
+  connection.query(sql, values, (err, results) => {
+    if (err) {
+      callback(err);
+    } else {
+      const receiptItems = results.map(result => ({
+        name: result.Name,
+        totalQuantity: result.TotalQuantity,
+        totalPrice: result.TotalPrice,
+        pricePerPiece: result.PricePerPiece,
+        totalPriceVAT: result.TotalPriceVAT,
+        discount: result.Discount,
+        totalDisc: result.TotalDisc,
+      }));
+      callback(null, receiptItems);
+    }
+  });
+}
+
+function getAllReceiptTotals(startDate, endDate, callback) {
+  const sql = `SELECT 
+                  SUM(Total) AS TotalSum, 
+                  SUM(TotalVAT) AS TotalVATSum, 
+                  SUM(TotalVat - (TotalVat/100)*Discount) AS TotalDiscountedSum,
+                  DATE(Date) AS DatePoint
+              FROM receipts
+              WHERE 
+                  Date >= ?
+                  AND Date <= ?
+              GROUP BY DatePoint;`;
+  const values = [startDate, endDate];
+  connection.query(sql, values, (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+      const totals = result
+      callback(null, totals);
+    }
+  });
+}
+function getAllReceiptItems( startDate, endDate, callback) {
+  const sql = `SELECT 
+                  ri.Name,
+                  SUM(ri.Quantity) AS TotalQuantity,
+                  SUM(ri.PriceTotal) AS TotalPrice,
+                  AVG(ri.PricePerPiece) AS PricePerPiece,
+                  SUM(ri.PriceTotalVAT) AS TotalPriceVAT,
+                  SUM(ri.Total) AS TotalDisc
+               FROM 
+                  receiptitems ri
+                  INNER JOIN receipts r ON ri.ReceiptID = r.ID
+               WHERE 
+                  r.Date >= ?
+                  AND r.Date <= ?
+               GROUP BY 
+                  ri.Name`;
+  const values = [startDate, endDate];
+  connection.query(sql, values, (err, results) => {
+    if (err) {
+      callback(err);
+    } else {
+      const receiptItems = results.map(result => ({
+        name: result.Name,
+        totalQuantity: result.TotalQuantity,
+        totalPrice: result.TotalPrice,
+        pricePerPiece: result.PricePerPiece,
+        totalPriceVAT: result.TotalPriceVAT,
+        discount: result.Discount,
+        totalDisc: result.TotalDisc,
+      }));
+      callback(null, receiptItems);
+    }
+  });
+}
+
 
 module.exports = {
   getUserById,
@@ -82,7 +232,16 @@ module.exports = {
   createUser,
   editUser,
   getAllClients,
+  getClientById,
   deleteClient,
   createClient,
-  editClient
+  editClient,
+  getClientReceipts,
+  getReceiptItems,
+  createClientReceipts,
+  createReceiptItem,
+  getClientReceiptTotals,
+  getClientReceiptItems,
+  getAllReceiptTotals,
+  getAllReceiptItems
 };

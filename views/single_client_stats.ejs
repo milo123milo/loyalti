@@ -1,0 +1,340 @@
+<link rel="stylesheet" href="/stylesheets/header.css" />
+<link rel="stylesheet" href="/stylesheets/users.css" />
+<link rel="stylesheet" href="/stylesheets/single.css" />
+<link rel="stylesheet" href="/stylesheets/fonts.css" />
+
+<link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+<script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js
+" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+   
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap- datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js
+" crossorigin="anonymous"></script>
+
+
+<style>
+    .btncont {
+        display: flex;
+    align-items: flex-end;
+    margin-left: 15px;
+    }
+    .charts1{
+        display: flex;
+        margin-inline: 100px;
+    }
+    .chart-wrapper {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+  }
+  .info {
+    display: flex;
+    font-size: 1.3rem;
+  }
+</style>
+
+
+
+
+
+
+
+
+
+<div id="head" class="header">
+    <div class="h1">
+        <%= name %>
+    </div>
+    <div class="head-left">
+
+        <button onclick="window.history.back()" style="margin-bottom: 4px;" id="logout-button" type="button"
+            class="bt btn btn-primary">
+            < Back</button>
+    </div>
+</div>
+
+<div class="content">
+    <div class="row">
+        <div class="col-lg-3 col-sm-6" style="min-width: 220px;">
+            <label for="startDate">Start</label>
+            <input id="startDate" class="form-control" type="date" />
+            <!-- <span id="startDateSelected"></span> -->
+        </div>
+        <div class="col-lg-3 col-sm-6" style="min-width: 220px;" >
+            <label for="endDate">End</label>
+            <input id="endDate" class="form-control" type="date" />
+        <!--  <span id="endDateSelected"></span>-->
+        </div>
+        <div class="btncont">
+            <button onclick="getItemsData()" id="update"class="btn btn-primary formbtn">Update ⟲</button>
+        </div>
+
+    </div>
+    <div class="info">
+        <div style="margin-right: 20px;">Discount: <span style="color: #2498e9;"><span id="discinfo"></span>%</span> </div>
+        <div style="margin-right: 20px;">Total purchased: <span style="color: #2498e9;"><span id="purcinfo"></span> € </span> </div>
+        <div style="margin-right: 20px;">Total paid: <span style="color: #2498e9;"><span id="paidinfo"></span> €</span> </div>
+        <div style="margin-right: 20px;">Saved: <span style="color: #2498e9;"><span id="savedinfo"></span> €</span> </div>
+    </div>
+</div>
+
+<div class="charts1">
+    <div class="chart-wrapper" style="margin-right: 20px;">
+        <canvas id="myChart1"></canvas>
+    </div>
+    <div class="chart-wrapper" style="margin-right: 20px;">
+        <canvas id="myChart2"></canvas>
+    </div>
+    <div class="chart-wrapper" >
+        <canvas id="myChart3"></canvas>
+    </div>
+</div>
+
+<div id="wrapper" style="margin-inline: 100px; margin-block: 50px;"></div>
+
+
+
+
+<script>
+            let startDate = document.getElementById('startDate')
+            let endDate = document.getElementById('endDate')
+
+            // Set default date values (e.g. 10 years ago and today)
+            let today = new Date();
+            let startDateDefault = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
+            let endDateDefault = new Date();
+
+            startDate.valueAsDate = startDateDefault;
+            endDate.valueAsDate = endDateDefault;
+            function getItemsData() {
+                    const d1 = document.getElementById('startDate').value
+                    const d2 = document.getElementById('endDate').value
+                    const sdate = new Date(d1);
+                    const sformattedDate = sdate.toISOString().substr(0, 10);
+                    const edate = new Date(d2);
+                    const eformattedDate = edate.toISOString().substr(0, 10);
+                    fetch('/get-stats/<%= id %>/' + sformattedDate + '/' + eformattedDate, { method: 'GET' })
+                        .then(response => {
+                            const data = response.json();
+                            
+                            return data
+                        })
+                        .then(it => {
+                            const data = it.items.sort((a, b) => b.totalDisc - a.totalDisc);
+
+                            myGrid.updateConfig({
+                                data: data
+                            }).forceRender();
+
+                            var chart = Chart.getChart('myChart2');
+
+                            const names = data.map(item => item.name).slice(0, 5);;
+                            const totalDiscs = data.map(item => item.totalDisc).slice(0, 5);;
+
+                            chart.data.datasets[0].data = totalDiscs
+                            chart.data.labels = names
+
+                            chart.update();
+
+                            var chart3 = Chart.getChart('myChart3');
+                            
+                            const dataa = data.sort((a, b) => b.totalQuantity - a.totalQuantity);
+                            const names3 = dataa.map(item => item.name).slice(0, 5);
+                            const totalQuantity = dataa.map(item => item.totalQuantity).slice(0, 5);;
+
+                            chart3.data.datasets[0].data = totalQuantity
+                            chart3.data.labels = names3
+
+                            chart3.update();
+                            
+                            const data1 = it.totals
+
+                            const result = data1.reduce((acc, cur) => {
+                                acc.TotalVATSum += cur.TotalVATSum;
+                                acc.TotalDiscountedSum += cur.TotalDiscountedSum;
+                                return acc;
+                            }, { TotalVATSum: 0, TotalDiscountedSum: 0 });
+
+                            const saved = result.TotalVATSum.toFixed(2) - result.TotalDiscountedSum.toFixed(2);
+
+                            document.getElementById('discinfo').innerText = data[0].discount
+                            document.getElementById('purcinfo').innerText = result.TotalVATSum.toFixed(2);
+                            document.getElementById('paidinfo').innerText = result.TotalDiscountedSum.toFixed(2);
+                            document.getElementById('savedinfo').innerText = saved.toFixed(2);
+                            
+
+                            var chart1 = Chart.getChart('myChart1');
+                            
+                            
+                            const sums = data1.map(item => item.TotalDiscountedSum).slice(0, 5);;
+                            
+                            const dates = data1.map(item => {
+                                const date = new Date(item.DatePoint);
+                                const day = date.getDate().toString().padStart(2, '0');
+                                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                                return `${day}.${month}`;
+                            }).slice(0, 5);
+
+                            
+                            
+                            chart1.data.datasets[0].data = sums
+                            
+                            chart1.data.labels = dates
+                            
+                            chart1.update();
+                            
+                        })
+                        .catch(error => { })
+
+
+                }
+    
+    getItemsData()
+
+
+        const myGrid = new gridjs.Grid({
+
+            columns: [
+                { id: 'name', name: 'Name' },
+                { id: 'totalQuantity', name: 'Quantity' },
+                { id: 'pricePerPiece', name: 'PricePerPiece' },
+                { id: 'totalPriceVAT', name: 'TotalPriceVAT' },
+                { id: 'discount', name: 'Discount' },
+                { id: 'totalDisc', name: 'TotalPriceDiscount' },
+               
+            ],
+            pagination: {
+                limit: 15
+            },
+            data: [],
+            sort: true,
+            search: true,
+
+        })
+
+        myGrid.render(document.getElementById("wrapper"));
+
+
+
+
+
+    
+
+      const ctx1 = document.getElementById('myChart1');
+      const ctx2 = document.getElementById('myChart2');
+      const ctx3 = document.getElementById('myChart3');
+   
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Spendings €',
+                    data: [],
+                    borderWidth: 1,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Discounted Client Spending',
+                        position: 'bottom'
+                    }
+                },
+               
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Price €',
+                        data: [],
+                        borderWidth: 1,
+                       
+                    }]
+                },
+                
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Highest-Spending Client Items',
+                            position: 'bottom'
+                        }
+                    },
+                }
+                
+            });
+            new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Quantity',
+                            data: [],
+                            borderWidth: 1,
+                            
+                        }]
+                    },
+                    
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: "Client's Top Items by Quantity",
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+
+    document.getElementById('startDateSelected').innerText = startDateDefault.toLocaleDateString();
+    document.getElementById('endDateSelected').innerText = endDateDefault.toLocaleDateString();
+
+    startDate.addEventListener('change', (e) => {
+        let startDateVal = e.target.value
+        document.getElementById('startDateSelected').innerText = startDateVal
+    })
+
+    endDate.addEventListener('change', (e) => {
+        let endDateVal = e.target.value
+        document.getElementById('endDateSelected').innerText = endDateVal
+    })
+    
+
+       
+       
+
+ 
+</script>

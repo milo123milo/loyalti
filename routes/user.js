@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('./rules/authCheck');
+var pool = require('../database/queries')
+var receipt = require('./workers/getReceiptInfo')
 
 router.use((req, res, next) => {
   if (req.user === false) {
@@ -13,6 +15,46 @@ router.use((req, res, next) => {
 
 router.get('/user', auth.done, function(req, res, next) {
   res.render('user');
+});
+router.get('/input', auth.done, function(req, res, next) {
+  res.render('input');
+});
+
+router.post('/checkBill', auth.done, (req, res) => {
+  // Check for any errors in the request body
+  const requestData = req.body;
+
+  // Do some processing with req.body here
+receipt.get(requestData.receipt).then(it => {
+
+  if (it && it.hasOwnProperty('iic')) {
+    pool.getClientById(requestData.card, (client, err) => {
+      
+      if (err) {
+        res.status(501).json({ message: 'Error Client', error: err });
+      } else {
+        const disc = parseInt(client[0].discount)
+        pool.createClientReceipts(it.id, it.iic, it.dateTimeCreated, it.sameTaxes[0].priceBeforeVat, it.totalPrice, disc, client[0].id, (err) => {
+          if (err) {
+            res.status(500).json({ message: 'Error Database', error: err });
+          } else {
+            for (let i = 0; i < it.items.length; i++) {
+              const item = it.items[i];
+              pool.createReceiptItem(it.id, item.name, item.quantity, item.unit, item.unitPriceBeforeVat, item.priceBeforeVat, item.priceAfterVat, disc, item.priceAfterVat - (item.priceAfterVat / 100) * disc); //DISCOUNT
+            }
+            res.status(200).json({ message: 'Request successful 200', data: it });
+          }
+        });
+      }
+    });
+  } else {
+    res.status(400).json({ error: 'Error 400' });
+  }
+});
+  console.log("Data:", "Good")
+
+  // Send a response with status code 200 and a JSON payload
+  
 });
 
 module.exports = router;

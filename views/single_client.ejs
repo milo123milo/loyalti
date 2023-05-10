@@ -1,0 +1,181 @@
+<link rel="stylesheet" href="/stylesheets/header.css" />
+<link rel="stylesheet" href="/stylesheets/users.css" />
+<link rel="stylesheet" href="/stylesheets/single.css" />
+    <link rel="stylesheet" href="/stylesheets/fonts.css" />
+
+<link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+<script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js
+"
+        
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    
+    <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<div class="header">
+    <div class="h1">
+        <%= name %> 
+    </div>
+    <div class="head-left">
+        
+        <button onclick="window.history.back()" style="margin-bottom: 4px;" id="logout-button" type="button" class="bt btn btn-primary">< Back</button>
+    </div>
+</div>
+
+
+<div id="wrapper" style="margin-inline: 100px;"></div>
+
+
+<!-- Modal -->
+<div class="modal fade in" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Items</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div id="wrapperItems" style=""></div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+  function getItems(id){
+    const domain = window.location.origin;
+    const url = `${domain}/getreceiptitems/${id}`;
+    fetch(url)
+          .then(response => response.json())
+          .then(data => {
+              itemsGrid.updateConfig({
+                data: data
+              }).forceRender();
+             // itemsGrid.render(document.getElementById("wrapperItems")) 
+             // return
+          })
+          .catch(error => console.error(error));
+  }
+  var dat = <%- JSON.stringify(data) %> ;
+  var datAr = dat.map(obj => Object.values(obj))
+ // datAr = datAr.filter(item => item[1] !== 'root');
+  const itemsGrid = new gridjs.Grid({
+
+        columns: [
+            { id: 'Name', name: 'Name' },
+            { id: 'Quantity', name: 'Quantity' },
+            { id: 'Unit', name: 'Unit'},
+            { id: 'PricePerPiece', name: 'Per Piece €' },
+            { id: 'PriceTotal', name: 'Total €' },
+            { id: 'PriceTotalVAT', name: 'TotalVAT €' },
+            { id: 'Discount', name: 'Discount %' },
+            { id: 'Total', name: 'Total €' },
+            
+        ],
+        data: datAr,
+        sort: true,
+        search: true,
+
+    }).render(document.getElementById("wrapperItems")) 
+
+  const myGrid = new  gridjs.Grid({
+            
+          columns: [
+              { id: 'id', name: 'ID' },
+              { id: 'iic', name: 'IIC' },
+              { id: 'date', name: 'Date', formatter: (cell) => new Date(cell).toLocaleDateString() },
+              { id: 'total', name: 'Total €'},
+              { id: 'totalVAT', name: 'TotalVAT €' },
+              { id: 'discount', name: 'Discount %' },
+              { id: 'totalDiscounted', name: 'Total Discounted €' },
+              {
+                  id: 'actions',
+                  name: 'Actions',
+                  formatter: (_, row) => {
+                      
+                      const buttonEdit = gridjs.h('button', {
+                          class: 'btn btn-info',
+                          style: 'margin-left: 0px;',
+                          'data-toggle': "modal" , 
+                          'data-target': "#editModal",
+                          onClick: () => { 
+                            getItems(row.cells[0].data)
+                            this.removeEventListener('click', arguments.callee);
+                            
+                        }
+                      }, 'Show Items');
+                      
+                      return gridjs.h('td', {},  buttonEdit);
+                  },
+              },
+          ],
+            data: datAr.reverse(),
+            sort: true,
+            search: true,
+  
+    })
+    myGrid.render(document.getElementById("wrapper"));
+     function deleteItem(id) {
+            $.ajax({
+                url: `/deleteclient/${id}`,
+                method: 'POST',
+                success: function (response) {
+                    console.log(response);
+                    location.reload()
+                },
+                error: function (error) {
+                    console.error(error);
+                    // handle error response
+                }
+            });
+        }
+    function editItem(data){
+        document.getElementById("edit-id").value = data[0].data
+        document.getElementById("edit-name").value = data[1].data
+        document.getElementById("edit-discount").value = data[2].data
+        document.getElementById("edit-type").value = data[3].data
+        document.getElementById("edit-pib").value = data[4].data
+        document.getElementById("edit-address").value = data[5].data
+    }
+    function checkInput() {
+            var userInput = document.getElementById("username").value;
+            var myForm = document.getElementById("userform");
+        myForm.addEventListener("submit", function () {
+            return checkInput();
+        })
+            if (userInput.toLowerCase() === "root") {
+                alert("Please choose a different username.");
+                return false;
+            }
+
+            return true;
+            
+        }
+    
+</script>

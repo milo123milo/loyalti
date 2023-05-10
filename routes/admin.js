@@ -7,10 +7,92 @@ var types = require('../database/role_types')
 
 //Add routes below
 
+function getClient(id) {
+  return new Promise((resolve, reject) => {
+    pool.getClientById(id, (client) => {
+      if (!client) {
+        reject(new Error('Client not found'));
+      } else {
+        resolve(client);
+      }
+    });
+  });
+}
+function getClientReceipts(id) {
+  return new Promise((resolve, reject) => {
+    pool.getClientReceipts(id, (receipts) => {
+      if (!receipts) {
+        reject(new Error('Client not found'));
+      } else {
+        resolve(receipts);
+      }
+    });
+  });
+}
+function getReceiptItems(id) {
+  return new Promise((resolve, reject) => {
+    pool.getReceiptItems(id, (items) => {
+      if (!items) {
+        reject(new Error('Bill not found'));
+      } else {
+        resolve(items);
+      }
+    });
+  });
+}
+function getClientReceiptItems(clientID, startDate, endDate) {
+  return new Promise((resolve, reject) => {
+    pool.getClientReceiptItems(clientID, startDate, endDate, (err, items) => {
+      if (!items) {
+        reject(new Error('Not found'));
+      } else {
+        resolve(items);
+      }
+    });
+  });
+}
+
+function getClientReceiptTotals(clientID, startDate, endDate) {
+  return new Promise((resolve, reject) => {
+    pool.getClientReceiptTotals(clientID, startDate, endDate, (err, items) => {
+      if (!items) {
+        reject(new Error('Not found'));
+      } else {
+        resolve(items);
+      }
+    });
+  });
+}
+function getAllReceiptItems(startDate, endDate) {
+  return new Promise((resolve, reject) => {
+    pool.getAllReceiptItems(startDate, endDate, (err, items) => {
+      if (!items) {
+        reject(new Error('Not found: getAllReceiptItems'));
+      } else {
+        resolve(items);
+      }
+    });
+  });
+}
+
+function getAllReceiptTotals(startDate, endDate) {
+  return new Promise((resolve, reject) => {
+    pool.getAllReceiptTotals(startDate, endDate, (err, items) => {
+      if (!items) {
+        reject(new Error('Not found: getAllReceiptTotals ***' + err));
+      } else {
+        resolve(items);
+      }
+    });
+  });
+}
+
+
 
 router.get('/admin', role.admin, auth.done, function(req, res, next) {
   return res.render('admin');
 });
+
 router.get('/users', auth.done, role.admin, function(req, res, next) {
   const { message } = req.query;
   pool.getAllUsers(it => {
@@ -73,6 +155,7 @@ router.post('/clients', auth.done, role.admin, function(req, res, next) {
      const message = "All fields are required!";
      res.redirect(`/clients?message=${encodeURIComponent(message)}`);
   } else {
+  const id = 
  pool.createClient(name, discount, type, pib, address)
  res.redirect('/clients')
  }
@@ -90,4 +173,90 @@ router.post('/editclient', auth.done, role.admin, function(req, res, next) {
   }
   
 });
+
+router.get('/singleclient/:id', auth.done, role.admin, (req, res) => {
+  const id = req.params.id;
+    
+  Promise.all([getClient(id), getClientReceipts(id)])
+  .then(([client, receipts]) => {
+  //  console.log(receipts)
+    res.render('single_client', { data: receipts, name: client[0].name });
+  })
+  .catch((error) => {
+    res.status(404).send(error.message);
+  });
+});
+router.get('/getreceiptitems/:id', auth.done, role.admin, (req, res) => {
+  const id = req.params.id;
+    
+  Promise.all([getReceiptItems(id)])
+  .then(([items]) => {
+  //  console.log(receipts)
+    res.json(items);
+  })
+  .catch((error) => {
+    res.status(404).send(error.message);
+  });
+});
+
+router.get('/stats', auth.done, role.admin, function(req, res, next) {
+
+
+    return res.render('generalstats'); 
+ 
+});
+router.get('/single-stats/:id', auth.done, role.admin, function(req, res, next) {
+    const id = req.params.id;
+     Promise.all([getClient(id) /*, getClientReceipts(id)*/])
+    .then(([client/*, receipts*/]) => {
+    //  console.log(receipts)
+    return res.render('single_client_stats', {name: client[0].name, id: id }); 
+     
+    })
+    .catch((error) => {
+      res.status(404).send(error.message);
+    });
+
+    
+ 
+});
+
+
+router.get('/get-stats/:id/:start/:end', auth.done, role.admin, function(req, res, next) {
+    const id = req.params.id;
+    const start = req.params.start;
+    const end = req.params.end;
+      Promise.all([ getClientReceiptItems(id, start, end), getClientReceiptTotals(id, start, end)])
+      .then(([items, totals]) => {
+      //  console.log(receipts)
+      const data = {items, totals};
+        res.json(data);
+      })
+      .catch((error) => {
+        res.status(404).send(error.message);
+      });
+
+
+    
+ 
+});
+
+router.get('/get-all-stats/:start/:end', /*auth.done, role.admin,*/ function(req, res, next) {
+    const start = req.params.start;
+    const end = req.params.end;
+      Promise.all([ getAllReceiptItems(start, end), getAllReceiptTotals(start, end)])
+      .then(([items, totals]) => {
+      //  console.log(receipts)
+      const data = {items, totals};
+        res.json(data);
+      })
+      .catch((error) => {
+        res.status(404).send(error.message);
+      });
+
+
+    
+ 
+});
+
 module.exports = router;

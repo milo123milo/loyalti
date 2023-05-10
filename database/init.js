@@ -44,25 +44,86 @@ function initDatabase(){
         WHERE NOT EXISTS (SELECT * FROM users WHERE name = 'root');`
         connection.query(addAdmin, (err) => {
             if(err) throw err;
-            console.log('Root admin user crearted')
+            console.log('Root admin user checked/crearted')
         })
 
         const createClientsTable = `
-            CREATE TABLE IF NOT EXISTS clients (
-                id INT PRIMARY KEY AUTO_INCREMENT,
-                name TEXT,
-                discount INT,
-                type VARCHAR(255),
-                pib INT DEFAULT NULL,
-                address TEXT
-                );
-            
+CREATE TABLE IF NOT EXISTS clients (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name TEXT,
+    discount INT,
+    type VARCHAR(255),
+    pib INT DEFAULT NULL,
+    address TEXT
+);
 
             `;
         connection.query(createClientsTable, (err) => {
             if (err) throw err;
             console.log('Clients table checked/created');
         });
+
+        const createReceiptTable = `
+            CREATE TABLE IF NOT EXISTS receipts (
+                ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                IIC TEXT,
+                Date DATETIME,
+                Total DECIMAL(10,2),
+                TotalVAT DECIMAL(10,2),
+                Discount DECIMAL(5,2),
+                TotalDiscounted DECIMAL(10,2) GENERATED ALWAYS AS (Total*(1-Discount/100)) STORED,
+                ClientID INT
+            );
+        `
+        connection.query(createReceiptTable, (err) => {
+            if (err) throw err;
+            console.log('Receipt table checked/created');
+        });
+
+        const createReceiptItemsTable = `
+            CREATE TABLE IF NOT EXISTS receiptitems (
+                ID int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                ReceiptID int(11) DEFAULT NULL,
+                Name varchar(255) DEFAULT NULL,
+                Quantity decimal(10,2) DEFAULT NULL,
+                Unit varchar(255) DEFAULT NULL,
+                PricePerPiece decimal(10,2) DEFAULT NULL,
+                PriceTotal decimal(10,2) DEFAULT NULL,
+                PriceTotalVAT decimal(10,2) DEFAULT NULL,
+                Discount decimal(5,2) DEFAULT NULL,
+                Total decimal(10,2) DEFAULT NULL
+            );
+        `
+        connection.query(createReceiptItemsTable, (err) => {
+            if (err) throw err;
+            console.log('Receipt Items table checked/created');
+        });
+
+          connection.query(
+    "SELECT COUNT(*) AS trigger_exists FROM information_schema.triggers WHERE trigger_name = 'auto_id' AND event_object_table = 'clients'",
+    (err, results) => {
+      if (err) throw err;
+
+      const triggerExists = results[0].trigger_exists;
+
+      // create the trigger if it does not exist
+      if (triggerExists === 0) {
+        connection.query(
+          "CREATE TRIGGER auto_id BEFORE INSERT ON clients FOR EACH ROW BEGIN DECLARE ordinal INT; DECLARE year CHAR(2); DECLARE month CHAR(2); DECLARE type_num INT; SET ordinal = (SELECT COUNT(*) + 1 FROM clients); SET year = DATE_FORMAT(CURDATE(), '%y'); SET month = DATE_FORMAT(CURDATE(), '%m'); IF NEW.type = 'faktura' THEN SET type_num = 1; ELSEIF NEW.type = 'kasa' THEN SET type_num = 0; END IF; SET NEW.id = CONCAT(ordinal, year, month, type_num); END;",
+          (err, results) => {
+            if (err) throw err;
+
+            console.log('Trigger created successfully');
+          }
+        );
+      } else {
+        console.log('Trigger already exists');
+      }
+    }
+  );
+
+
+
 
         });
     });

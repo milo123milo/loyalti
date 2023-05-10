@@ -1,6 +1,7 @@
 <head>
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
     <link rel="stylesheet" href="/stylesheets/index.css" />
+    <link rel="stylesheet" href="/stylesheets/fonts.css" />
     <link rel="stylesheet" href="/stylesheets/header.css" />
     
 </head>
@@ -17,6 +18,13 @@
 
             <% if(role==='admin' ){ %>
                 <%- include('comps/card', {admin: true, href: '/clients' , link: '/images/clients.svg' , title: "Clients" }); %>
+            <% } %>
+            <% if(role==='admin' ){ %>
+                <%- include('comps/card', {admin: true, href: '/stats' , link: '/images/data.svg' , title: "General Stats" }); %>
+            <% } %>
+
+            <% if(role==='user' || role==='admin'){ %>
+                <%- include('comps/card', {admin: true, href: '/input' , link: '/images/qr.svg' , title: "Input" }); %>
             <% } %>
     </div>
     

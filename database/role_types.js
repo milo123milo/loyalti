@@ -1,6 +1,6 @@
 const roles = ['admin', 'user']
 
-const clientType = ['Kasa', 'Faktura', 'Oba']
+const clientType = ['Kasa', 'Faktura']
 
 module.exports = {
     roles,
