@@ -45,13 +45,13 @@ function initDatabase(){
         });
 
         const addAdmin = `
-        INSERT INTO users (name, password, role) 
-        SELECT '${user.user.name}', '${user.user.password}', '${user.user.role}'
-        WHERE NOT EXISTS (SELECT * FROM users WHERE name = 'root');`
+            INSERT INTO users (name, password, role) 
+            SELECT '${user.user.name}', '${user.user.password}', '${user.user.role}'
+            WHERE NOT EXISTS (SELECT * FROM users WHERE name = '${user.user.name}')`;
         connection.query(addAdmin, (err) => {
             if(err) throw err;
-            console.log('Root admin user checked/crearted')
-        })
+            console.log('Root admin user checked/created')
+        });
 
         const createClientsTable = `
 CREATE TABLE IF NOT EXISTS clients (
