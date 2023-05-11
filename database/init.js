@@ -2,12 +2,18 @@ const mysql = require('mysql');
 const user = require('./root')
 
 // MySQL connection configuration
+/* dev db
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: ''
 });
-
+*/
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'milo',
+  password: 'moonwalker91'
+});
 // Connect to MySQL
 function initDatabase(){
     connection.connect((err) => {
