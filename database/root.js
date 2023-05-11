@@ -1,3 +1,3 @@
-const user = {name: 'root', password: 'root', role: 'admin'}
+const user = {name: 'root', password: 'root', role: 'root'}
 
 module.exports = {user}

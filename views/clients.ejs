@@ -30,7 +30,9 @@
         Clients
     </div>
     <div class="head-left">
+        <% if(role==='root' ){ %>
         <button  style="margin-bottom: 4px;" id="logout-button" type="button" class=" bt btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">+ Create new</button>
+        <% } %>
         <button onclick="window.location='/'" style="margin-bottom: 4px;" id="logout-button" type="button" class="bt btn btn-primary">< Back</button>
     </div>
 </div>
@@ -174,28 +176,35 @@
                   id: 'actions',
                   name: 'Actions',
                   formatter: (_, row) => {
+                    <% if (role === 'root') { %>
+            
                       const button = gridjs.h('button', {
                         class: 'btn btn-danger'  ,
+                        style: 'margin-right: 10px;',
                         onClick: () => deleteItem(row.cells[0].data)
                       }, 'Delete');
                       const buttonEdit = gridjs.h('button', {
                           class: 'btn btn-success',
-                          style: 'margin-left: 10px;',
+                          style: 'margin-right: 10px;',
                           'data-toggle': "modal" , 
                           'data-target': "#editModal",
                           onClick: () => editItem(row.cells)
                       }, 'Edit');
+                      <% } %>
                       const buttonReport = gridjs.h('button', {
                           class: 'btn btn-info',
-                          style: 'margin-left: 10px;',
+                          style: 'margin-right: 10px;',
                           onClick: () => window.location.href = `singleclient/${row.cells[0].data}`
                       }, 'Receipts');
                       const buttonStats = gridjs.h('button', {
                           class: 'btn btn-warning',
-                          style: 'margin-left: 10px;',
                           onClick: () => window.location.href = `single-stats/${row.cells[0].data}`
                       }, 'Statistics');
-                      return gridjs.h('td', {}, button, buttonEdit, buttonReport, buttonStats);
+                      return gridjs.h('td', {},
+                      <% if (role === 'root') { %>
+                      button, buttonEdit, 
+                      <% } %>
+                      buttonReport, buttonStats);
                   },
               },
           ],

@@ -141,7 +141,7 @@ router.get('/clients', auth.done, role.admin, function(req, res, next) {
   const { message } = req.query;
   const clientType = types.clientType
   pool.getAllClients(it => {
-    return res.render('clients', {message, data: it, types: clientType}); 
+    return res.render('clients', {message, data: it, types: clientType, role: req.user.role}); 
   })
 });
 router.post('/deleteclient/:id', auth.done, role.admin, (req, res) => {

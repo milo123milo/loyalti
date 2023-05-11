@@ -12,18 +12,18 @@
 
 <div class="menu">
     <div class="admin-items">
-            <% if(role === 'admin'){ %>
+            <% if(role==='root'){ %>
                 <%- include('comps/card', {admin: true,href: '/users' , link: '/images/user.svg' , title: "Users" }); %>
             <% } %>
 
-            <% if(role==='admin' ){ %>
+            <% if(role==='admin' || role==='root' ){ %>
                 <%- include('comps/card', {admin: true, href: '/clients' , link: '/images/clients.svg' , title: "Clients" }); %>
             <% } %>
-            <% if(role==='admin' ){ %>
+            <% if(role==='admin' || role==='root' ){ %>
                 <%- include('comps/card', {admin: true, href: '/stats' , link: '/images/data.svg' , title: "General Stats" }); %>
             <% } %>
 
-            <% if(role==='user' || role==='admin'){ %>
+            <% if(role==='user' || role==='root'){ %>
                 <%- include('comps/card', {admin: true, href: '/input' , link: '/images/qr.svg' , title: "Input" }); %>
             <% } %>
     </div>
