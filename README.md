@@ -1,5 +1,7 @@
 # loyalti
 
+**DELETE function for Clients which have receipts ** Need To Implement
+
 Root user is created on init, it cant be created od edited from UI or API. username: root, password: root
 
 Install modules: npm install
