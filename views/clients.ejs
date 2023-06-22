@@ -4,6 +4,7 @@
 
 <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
 <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js
 "
@@ -86,14 +87,44 @@
                         <label for="role" class="form-label">Address:</label>
                         <input type="text" id="address" name="address" class="form-control" required>
                     </div>
+                    <div class="filed">
+                        <label for="role" class="form-label">Category:</label>
+                        <select id="edit-category" name="category" class="form-control" required>
+                            <% category.forEach(function(category) { %>
+                                <option value="<%= category.name %>">
+                                    <%= category.name %>
+                                </option>
+                                <% }); %>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6" style="min-width: 220px;">
+                            <label for="startDate">Start</label>
+                            <input id="startDate" name="start" class="form-control" type="date"/>
+                            <!-- <span id="startDateSelected"></span> -->
+                        </div>
+                        <div class="col-lg-3 col-sm-6" style="min-width: 220px;">
+                            <label for="endDate">End</label>
+                            <input id="endDate" name="end" class="form-control" type="date" />
+                            <!--  <span id="endDateSelected"></span>-->
+                        </div>
+                    
+                    </div>
+                    <div class="field">
+                        <div id="infocont" style="padding-top: 10px;" class="filed"></div>
+                        <div class="" style="min-width: 220px; padding-top: 15px">
+                            <button id="addinfo" type="button" class="btn btn-success">+ Additional Info</button>
+                        </div>
+                           
+                    </div>
                 
                     
                 
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit"  onclick="document.getElementById('userform').submit();" type="button" class="btn btn-primary">Create</button>
+                <button type="button" onclick="deleteAllElements()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit"  onclick="submitFormAndExpandInfo();" type="button" class="btn btn-primary">Create</button>
             </div>
         </div>
     </div>
@@ -142,6 +173,23 @@
                         <label for="role" class="form-label">Address:</label>
                         <input type="text" id="edit-address" name="address" class="form-control" required>
                     </div>
+                    <div class="filed">
+                        <label for="role" class="form-label">Category:</label>
+                        <select id="edit-category" name="category" class="form-control" required>
+                            <% category.forEach(function(category) { %>
+                                <option value="<%= category.name %>">
+                                    <%= category.name %>
+                                </option>
+                                <% }); %>
+                        </select>
+                    </div>
+                    <div class="row">                    
+                        <div class="col-lg-3 col-sm-6" style="min-width: 220px;">
+                        <label for="endDate">End</label>
+                        <input id="edit-endDate" name="end" class="form-control" type="date" />
+                        <!--  <span id="endDateSelected"></span>-->
+                    </div>
+                    </div>
 
 
 
@@ -156,9 +204,55 @@
     </div>
 </div>
 
+<div class="modal fade in" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Additional info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id='infodata' class="field"></div>
+                <div class="field">
+                    <div id="edit-infocont" style="padding-top: 10px;" class="filed"></div>
+                    <div class="" style="min-width: 220px; padding-top: 15px; padding-bottom: 15px;">
+                        <button id="edit-addinfo" type="button" class="btn btn-success">+ Additional Info</button>
+                    </div>
+                
+                </div>
+             
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" onclick="saveEditInfo()" type="button"
+                    class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <script>
+    $(document).ready(function () {
+        // Find the modal element using its ID
+        var modal = $('#infoModal');
+        var modal2 =  $('#exampleModalCenter'); 
+
+        // Add an event listener for the modal's hidden.bs.modal event
+        modal2.on('hidden.bs.modal', function () {
+            // Handle the closing event here
+            deleteAllElements()
+            // Additional actions or code to execute when the modal is closed
+        });
+        
+        modal.on('hidden.bs.modal', function () {
+            // Handle the closing event here
+            deleteAllElementsEdit()
+            // Additional actions or code to execute when the modal is closed
+        });
+    });
   var dat = <%- JSON.stringify(data) %> ;
   var datAr = dat.map(obj => Object.values(obj))
  // datAr = datAr.filter(item => item[1] !== 'root');
@@ -170,8 +264,12 @@
               { id: 'name', name: 'Name' },
               { id: 'discount', name: 'Discount' },
               { id: 'type', name: 'Type' },
-              { id: 'pib', name: 'PIB' },
-              { id: 'address', name: 'Address' },
+              { id: 'pib', name: 'PIB', hidden: true },
+              { id: 'address', name: 'Address', hidden: true },
+              { id: 'info', name: 'Info', hidden: true },
+              { id: 'dcat', name: 'Category' },
+              { id: 'start', name: 'Start', hidden: true },
+              { id: 'end', name: 'End', formatter: (cell) => cell ? new Date(cell).toISOString().split('T')[0] : '' },
               {
                   id: 'actions',
                   name: 'Actions',
@@ -198,13 +296,20 @@
                       }, 'Receipts');
                       const buttonStats = gridjs.h('button', {
                           class: 'btn btn-warning',
+                          style: 'margin-right: 10px;',
                           onClick: () => window.location.href = `single-stats/${row.cells[0].data}`
                       }, 'Statistics');
+                      const buttonInfo = gridjs.h('button', {
+                          class: 'btn btn-secondary',
+                          'data-toggle': "modal",
+                          'data-target': "#infoModal",
+                          onClick: () => editInfo(row.cells)
+                      }, 'Info');
                       return gridjs.h('td', {},
                       <% if (role === 'root') { %>
                       button, buttonEdit, 
                       <% } %>
-                      buttonReport, buttonStats);
+                      buttonReport, buttonStats, buttonInfo);
                   },
               },
           ],
@@ -216,7 +321,7 @@
             search: true,
   
         })
-    
+   
     myGrid.render(document.getElementById("wrapper"));
      function deleteItem(id) {
             $.ajax({
@@ -232,6 +337,46 @@
                 }
             });
         }
+         
+    const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+
+        // Get today's date
+        const today = new Date().toISOString().split('T')[0];
+        const td = new Date()
+        
+        startDateInput.setAttribute('min', today);
+        startDateInput.value = (today)
+
+        const startDate = new Date(startDateInput.value);
+
+            // Calculate the minimum end date
+            const minEndDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000); // Add 1 day
+
+            // Format the minimum end date as yyyy-MM-dd
+            const minEndDateFormatted = minEndDate.toISOString().split('T')[0];
+
+            // Set the minimum attribute for the end date input
+            endDateInput.setAttribute('min', minEndDateFormatted);
+        endDateInput.value = minEndDateFormatted
+        
+
+        // Event listener for start date change
+        startDateInput.addEventListener('change', function () {
+            // Get the selected start date
+            const startDate = new Date(startDateInput.value);
+            
+            // Calculate the minimum end date
+            const minEndDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000); // Add 1 day
+
+            // Format the minimum end date as yyyy-MM-dd
+            const minEndDateFormatted = minEndDate.toISOString().split('T')[0];
+
+            // Set the minimum attribute for the end date input
+            endDateInput.setAttribute('min', minEndDateFormatted);
+            endDateInput.value = minEndDateFormatted
+            
+        });
     function editItem(data){
         document.getElementById("edit-id").value = data[0].data
         document.getElementById("edit-name").value = data[1].data
@@ -239,6 +384,75 @@
         document.getElementById("edit-type").value = data[3].data
         document.getElementById("edit-pib").value = data[4].data
         document.getElementById("edit-address").value = data[5].data
+        document.getElementById("edit-category").value = data[7].data
+        document.getElementById("edit-endDate").value = new Date(data[9].data).toISOString().split('T')[0];
+
+    }
+    var globalID = 0
+    function editInfo(data) {
+        const id = data[0].data
+        globalID = id
+        fetch('/singleclientinfo/' + id)
+            .then(response => response.json())
+            .then(data => {
+                // Process the received data
+                console.log(data);
+                const dataString = data.info;
+
+                // Split the data string into individual pairs
+                const pairs = dataString.split(', ');
+
+                // Create a document fragment to hold the generated HTML
+                const fragment = document.createDocumentFragment();
+
+                // Loop through each pair and generate HTML
+                pairs.forEach(pair => {
+                    const [name1, name2] = pair.split(':');
+
+                    // Create a div element for each pair
+                    const div = document.createElement('div');
+                    div.classList.add('edit-infofields');
+                    // Create input fields for name1 and name2
+                    const input1 = document.createElement('input');
+                    input1.type = 'text';
+                    input1.value = name1;
+                    input1.classList.add('form-control', 'frVal')
+
+                    const input2 = document.createElement('input');
+                    input2.type = 'text';
+                    input2.value = name2;
+                    input2.classList.add('form-control', 'frVal')
+
+                    const button = document.createElement('Button');
+                    button.classList.add('btn', 'btn-trash')
+                    button.textContent = '✖'
+                    button.onclick
+                    button.addEventListener('click', function () {
+                        const parentDiv = button.parentNode;
+                        parentDiv.remove();
+                        console.log("BUTTOn")
+                    });
+                    
+                    // Append the input fields to the div
+                    div.appendChild(input1);
+                    div.appendChild(input2);
+                    div.appendChild(button)
+
+                    // Append the div to the document fragment
+                    fragment.appendChild(div);
+                });
+
+                // Find the container div with the id "infodata"
+                const container = document.getElementById('infodata');
+
+                // Append the generated HTML to the container div
+                container.appendChild(fragment);
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error:', error);
+            });
+
     }
     function checkInput() {
             var userInput = document.getElementById("username").value;
@@ -254,5 +468,225 @@
             return true;
             
         }
+            const generateButton = document.getElementById('addinfo');
+            const container = document.getElementById('infocont');
+
+            // Add event listener to the button
+            generateButton.addEventListener('click', generateDiv);
+
+            // Function to generate the div
+            function generateDiv() {
+                const newDiv = document.createElement('div');
+                newDiv.classList.add('infofields');
+                // Create the first input field
+                const input1 = document.createElement('input');
+                input1.type = 'text';
+                input1.placeholder = 'Name';
+                input1.classList.add('form-control', 'frVal')
+                
+
+                // Create the second input field
+                const input2 = document.createElement('input');
+                input2.type = 'text';
+                input2.placeholder = 'Value';
+                input2.classList.add('form-control')
+                const button = document.createElement('Button');
+                button.classList.add('btn', 'btn-trash')
+                button.textContent = '✖'
+                button.onclick
+                button.addEventListener('click', function () {
+                    const parentDiv = button.parentNode;
+                    parentDiv.remove();
+                    console.log("BUTTOn")
+                });
+                
+                // Append the input fields to the new div
+                newDiv.appendChild(input1);
+                newDiv.appendChild(input2);
+                newDiv.appendChild(button)
+                // Append the new div to the container
+                container.appendChild(newDiv);
+            }
+        
+        function submitFormAndExpandInfo() {
+                // Submit the form
+               
+
+                // Get the info string
+                const infoString = getInfo();
+
+                // Expand the form info
+                const obj = expandFormInfo(infoString);
+
+                fetch('/clients', {
+                method: 'POST',
+                body: JSON.stringify(obj),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    location.reload()
+                    // Handle the server response
+                });
+            }
+
+            function getInfo() {
+                const infocont = document.getElementById("infocont"); // Get the parent container
+
+                const infofields = infocont.getElementsByClassName("infofields"); // Get the dynamically generated elements
+
+                // Initialize an empty array to store the field values
+                const fieldValues = [];
+
+                // Loop through each dynamically generated element
+                for (let i = 0; i < infofields.length; i++) {
+                    const inputs = infofields[i].getElementsByTagName("input"); // Get the input fields within the current element
+
+                    const values = [];
+                    // Loop through each input field
+                    for (let j = 0; j < inputs.length; j++) {
+                        const value = inputs[j].value.trim(); // Get the value of the input field
+
+                        // Push the value to the values array if it is not empty
+                        if (value !== '') {
+                            values.push(value);
+                        }
+                    }
+
+                    if (values.length === 2) {
+                        const pair = values.join(':'); // Join the values with ':'
+                        fieldValues.push(pair); // Push the pair to the fieldValues array
+                    }
+                }
+
+                // Join the field values with the desired format
+                const string = fieldValues.join(', ');
+                console.log(string);
+                return string;
+            }
+
+            function expandFormInfo(infoString) {
+                // Create a new div element
+                const form = document.querySelector('#userform');
+                const formData = new FormData(form);
+                const formObject = {};
+                for (let [key, value] of formData.entries()) {
+                    formObject[key] = value;
+                }
+                formObject.extraInfo = infoString;
+
+                return formObject
+
+            }
     
+                       const editGen = document.getElementById('edit-addinfo');
+                        const editcont = document.getElementById('edit-infocont');
+
+                        // Add event listener to the button
+                        editGen.addEventListener('click', generateDivEdit);
+
+                        // Function to generate the div
+                        function generateDivEdit() {
+                            const newDiv = document.createElement('div');
+                            newDiv.classList.add('edit-infofields');
+                            // Create the first input field
+                            const input1 = document.createElement('input');
+                            input1.type = 'text';
+                            input1.placeholder = 'Name';
+                            input1.classList.add('form-control', 'frVal')
+
+
+                            // Create the second input field
+                            const input2 = document.createElement('input');
+                            input2.type = 'text';
+                            input2.placeholder = 'Value';
+                            input2.classList.add('form-control', 'frVal')
+
+                            const button = document.createElement('Button');
+                            button.classList.add('btn', 'btn-trash')
+                            button.textContent = '✖'
+                            button.onclick
+                            button.addEventListener('click', function () {
+                                const parentDiv = button.parentNode;
+                                parentDiv.remove();
+                                console.log("BUTTOn")
+                            });
+                            // Append the input fields to the new div
+                            newDiv.appendChild(input1);
+                            newDiv.appendChild(input2);
+                            newDiv.appendChild(button);
+
+                            // Append the new div to the container
+                            editcont.appendChild(newDiv);
+                        }
+
+                        
+                        function deleteAllElementsEdit() {
+                                const editcont = document.getElementById('edit-infocont');
+                              
+                                const datacont = document.getElementById('infodata');
+
+                                while (editcont.firstChild) {
+                                    editcont.firstChild.remove();
+                                }
+                                while (datacont.firstChild) {
+                                datacont.firstChild.remove();
+                            }
+                            }
+                            function deleteAllElements() {
+                                    const container = document.getElementById('infocont');
+
+                                    while (container.firstChild) {
+                                        container.firstChild.remove();
+                                    }
+                                }
+
+        function saveEditInfo() {
+              const divs = document.querySelectorAll('.edit-infofields');
+            const values = [];
+
+            divs.forEach(div => {
+                const inputs = div.querySelectorAll('input');
+                if (inputs.length === 2) {
+                    const value1 = inputs[0].value;
+                    const value2 = inputs[1].value;
+                    values.push(`${value1}:${value2}`);
+                }
+            });
+
+            const result = values.join(', ');
+            $('#infoModal').modal('hide');
+            postInfoEdit(result)
+            console.log(result)
+            //return result;
+        }        
+        function postInfoEdit(datainfo) {
+            console.log('here')
+            const data = { id: globalID, info: datainfo}
+            fetch('/editclientinfo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Error: ' + response.status);
+                    }
+                })
+                .then(responseData => {
+                    // Handle the response data
+                    console.log(responseData);
+                })
+                .catch(error => {
+                    // Handle any errors
+                    console.error('Error:', error);
+                });
+        }       
+
+
 </script>

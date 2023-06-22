@@ -55,6 +55,24 @@ function initDatabase(){
             console.log('Root admin user checked/created')
         });
 
+        const createCategoryTable = `
+            CREATE TABLE IF NOT EXISTS category (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name TEXT,
+                duration INT,
+                rangeval VARCHAR(255),
+                discrange VARCHAR(255),
+                startdisc INT,
+                maxdisc INT
+            );
+            
+
+            `;
+        connection.query(createCategoryTable, (err) => {
+            if (err) throw err;
+            console.log('Category table checked/created');
+        });
+
         const createClientsTable = `
         CREATE TABLE IF NOT EXISTS clients (
             id INT PRIMARY KEY AUTO_INCREMENT,
@@ -84,7 +102,11 @@ function initDatabase(){
                 TotalVAT DECIMAL(10,2),
                 Discount DECIMAL(5,2),
                 TotalDiscounted DECIMAL(10,2) GENERATED ALWAYS AS (Total*(1-Discount/100)) STORED,
-                ClientID INT
+                ClientID INT,
+                CONSTRAINT fk_receipts_client
+                  FOREIGN KEY (ClientID)
+                  REFERENCES clients(id)
+                  ON DELETE CASCADE
             );
         `
         connection.query(createReceiptTable, (err) => {
@@ -103,7 +125,11 @@ function initDatabase(){
                 PriceTotal decimal(10,2) DEFAULT NULL,
                 PriceTotalVAT decimal(10,2) DEFAULT NULL,
                 Discount decimal(5,2) DEFAULT NULL,
-                Total decimal(10,2) DEFAULT NULL
+                Total decimal(10,2) DEFAULT NULL,
+                CONSTRAINT fk_receiptitems_receipt
+                  FOREIGN KEY (ReceiptID)
+                  REFERENCES receipts(ID)
+                  ON DELETE CASCADE
             );
         `
         connection.query(createReceiptItemsTable, (err) => {

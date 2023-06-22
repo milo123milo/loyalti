@@ -4,7 +4,7 @@ var auth = require('./rules/authCheck');
 var role = require('./rules/roleCheck')
 var pool = require('../database/queries')
 var types = require('../database/role_types')
-
+var workers = require('./workers/helperFunctions')
 //Add routes below
 
 function getClient(id) {
@@ -88,6 +88,12 @@ function getAllReceiptTotals(startDate, endDate) {
 }
 
 
+router.get('/category', auth.done, role.admin, function(req, res, next) {
+  const { message } = req.query;
+  pool.getAllCategory(it => {
+    return res.json(it); 
+  })
+});
 
 router.get('/admin', role.admin, auth.done, function(req, res, next) {
   return res.render('admin');
@@ -140,9 +146,19 @@ router.post('/deleteuser/:id',auth.done, role.admin, (req, res) => {
 router.get('/clients', auth.done, role.admin, function(req, res, next) {
   const { message } = req.query;
   const clientType = types.clientType
-  pool.getAllClients(it => {
-    return res.render('clients', {message, data: it, types: clientType, role: req.user.role}); 
+  const obj = {
+  name: "None"
+  };
+  pool.getAllCategory(catg => { 
+    console.log(catg)
+    const modifiedCatg = [obj, ...catg]; 
+
+    pool.getAllClients(it => {
+    return res.render('clients', {message, data: it, types: clientType, role: req.user.role, category: modifiedCatg }); 
   })
+  })
+  
+  
 });
 router.post('/deleteclient/:id', auth.done, role.admin, (req, res) => {
   const id = req.params.id;
@@ -150,27 +166,43 @@ router.post('/deleteclient/:id', auth.done, role.admin, (req, res) => {
   res.send('Client ${id} deleted.');
 });
 router.post('/clients', auth.done, role.admin, function(req, res, next) {
- const { name, discount, type, pib, address } = req.body;
+ var { name, discount, type, pib, address, category, start, end, extraInfo } = req.body;
+ console.log(req.body)
+ if(category == 'None') {
+  category = ''
+ }
+ end = end+'T22:00:00.000Z'
   if(name === '' || discount === '' || type === '' ){
      const message = "All fields are required!";
      res.redirect(`/clients?message=${encodeURIComponent(message)}`);
   } else {
   const id = 
- pool.createClient(name, discount, type, pib, address)
+ pool.createClient(name, discount, type, pib, address, category, start, end, extraInfo)
  res.redirect('/clients')
  }
   
 });
 router.post('/editclient', auth.done, role.admin, function(req, res, next) {
- const { id, name, discount, type, pib, address } = req.body;
+ var { id, name, discount, type, pib, address, category } = req.body;
+ if(category == 'None') {
+  category = ''
+ }
+ end = end+'T22:00:00.000Z'
    if(name === '' || discount === '' || type === '' ){
      const message = "All fields are required!";
      res.redirect(`/clients?message=${encodeURIComponent(message)}`);
   }else {
 
- pool.editClient(id, name, discount, type, pib, address)
+ pool.editClient(id, name, discount, type, pib, address, category, end,)
  res.redirect('/clients')
   }
+  
+});
+router.post('/editclientinfo', auth.done, role.admin, function(req, res, next) {
+ var { id, info } = req.body;
+
+ pool.updateClientInfo(id, info)
+ 
   
 });
 
@@ -181,6 +213,18 @@ router.get('/singleclient/:id', auth.done, role.admin, (req, res) => {
   .then(([client, receipts]) => {
   //  console.log(receipts)
     res.render('single_client', { data: receipts, name: client[0].name });
+  })
+  .catch((error) => {
+    res.status(404).send(error.message);
+  });
+});
+router.get('/singleclientinfo/:id', auth.done, role.admin, (req, res) => {
+  const id = req.params.id;
+    
+  Promise.all([getClient(id)])
+  .then(([client]) => {
+  //  console.log(receipts)
+    res.json(client[0]);
   })
   .catch((error) => {
     res.status(404).send(error.message);
@@ -198,6 +242,8 @@ router.get('/getreceiptitems/:id', auth.done, role.admin, (req, res) => {
     res.status(404).send(error.message);
   });
 });
+
+
 
 router.get('/stats', auth.done, role.admin, function(req, res, next) {
 

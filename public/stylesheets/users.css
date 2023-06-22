@@ -13,3 +13,22 @@
     margin-inline: 104px;
     color: #dc3545;
  }
+
+ .infofields {
+   display: flex;
+   padding-top: 20px ;
+ }
+ .edit-infofields {
+    display: flex;
+    padding-top: 20px;
+ }
+ .frVal {
+   margin-right: 10px;
+ }
+
+ .btn-trash {
+         color: #dc3545 !important;
+         background-color: #fff !important;
+         border-color: #fff !important;
+      
+ }

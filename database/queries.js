@@ -1,5 +1,13 @@
 var connection = require('./db_connection')
+connection = connection.pool
 
+function getAllCategory(callback){
+  const sql = 'SELECT * FROM category';
+  connection.query(sql, (err, rows) => {
+    if (err) throw err;
+    callback(rows);
+  });
+}
 function getUserById(id, callback) {
   const sql = 'SELECT * FROM users WHERE id = ?';
   connection.query(sql, [id], (err, rows) => {
@@ -65,17 +73,26 @@ function deleteClient(id){
     if (err) throw err;
   });
 }
-function createClient(id, name, discount, type, pib, address) {
-  const sql = 'INSERT INTO clients (name, discount, type, pib, address) VALUES (?, ?, ?, ?, ?)';
-  connection.query(sql, [name, discount, type, pib, address], (err, rows) => {
+function createClient(name, discount, type, pib, address, dcat, start, end, info) {
+  const sql = 'INSERT INTO clients (name, discount, type, pib, address, dcat, start, end, info) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+  connection.query(sql, [name, discount, type, pib, address, dcat, start, end, info],  (err, rows) => {
     if (err) throw err;
   });
 }
-function editClient(id, name, discount, type, pib, address) {
+function editClient(id, name, discount, type, pib, address, dcat, end) {
   const sql = `UPDATE clients
-SET name = ?, discount = ?, type = ?, pib = ?, address = ?
+SET name = ?, discount = ?, type = ?, pib = ?, address = ?, dcat = ?, end = ?
 WHERE id = ?;`
-connection.query(sql, [name, discount, type, pib, address, id], (err, rows) => {
+connection.query(sql, [name, discount, type, pib, address, dcat, end, id], (err, rows) => {
+    if (err) throw err;
+  });
+}
+function updateClientInfo(id, info) {
+  const sql = `
+  UPDATE clients
+  SET info = ?
+  WHERE id = ?`
+connection.query(sql, [info, id], (err, rows) => {
     if (err) throw err;
   });
 }
@@ -236,6 +253,7 @@ module.exports = {
   deleteClient,
   createClient,
   editClient,
+  updateClientInfo,
   getClientReceipts,
   getReceiptItems,
   createClientReceipts,
@@ -243,5 +261,6 @@ module.exports = {
   getClientReceiptTotals,
   getClientReceiptItems,
   getAllReceiptTotals,
-  getAllReceiptItems
+  getAllReceiptItems,
+  getAllCategory
 };
