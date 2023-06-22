@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const user = require('./root')
+const db = require('./db_connection')
 
 // MySQL connection configuration
 /* dev db
@@ -8,12 +9,13 @@ const connection = mysql.createConnection({
   user: 'root',
   password: ''
 });
-*/
+*//*
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: ''
-});
+});*/
+const connection = db.connection
 // Connect to MySQL
 function initDatabase(){
     connection.connect((err) => {
@@ -54,14 +56,18 @@ function initDatabase(){
         });
 
         const createClientsTable = `
-CREATE TABLE IF NOT EXISTS clients (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name TEXT,
-    discount INT,
-    type VARCHAR(255),
-    pib INT DEFAULT NULL,
-    address TEXT
-);
+        CREATE TABLE IF NOT EXISTS clients (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            name TEXT,
+            discount INT,
+            type VARCHAR(255),
+            pib INT DEFAULT NULL,
+            address TEXT,
+            info TEXT, 
+            dcat TEXT,
+            start DATETIME,
+            end DATETIME
+        );
 
             `;
         connection.query(createClientsTable, (err) => {
