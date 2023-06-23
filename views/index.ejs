@@ -23,6 +23,10 @@
                 <%- include('comps/card', {admin: true, href: '/stats' , link: '/images/data.svg' , title: "General Stats" }); %>
             <% } %>
 
+            <% if(role==='admin' || role==='root' ){ %>
+                <%- include('comps/card', {admin: true, href: '/categories' , link: '/images/percent.svg' , title: "Categories" }); %>
+                    <% } %>
+
             <% if(role==='user' || role==='root'){ %>
                 <%- include('comps/card', {admin: true, href: '/input' , link: '/images/qr.svg' , title: "Input" }); %>
             <% } %>

@@ -95,6 +95,36 @@ router.get('/category', auth.done, role.admin, function(req, res, next) {
   })
 });
 
+router.post('/category', auth.done, role.admin, function(req, res, next) {
+ 
+ const { id, name, duration, rangeval, discrange, startdisc, maxdisc  } = req.body;
+ console.log(req.body)
+ pool.editCategory(id, name, duration, rangeval, discrange, startdisc, maxdisc)
+ res.send('Ok')
+  
+});
+
+router.post('/create-category', auth.done, role.admin, function(req, res, next) {
+ 
+ const { name, duration, rangeval, discrange, startdisc, maxdisc  } = req.body;
+ console.log(req.body)
+ pool.createCategory(name, duration, rangeval, discrange, startdisc, maxdisc)
+ res.send('Ok')
+  
+});
+router.get('/delete-category/:id', auth.done, role.admin, (req, res) => {
+  const id = req.params.id;
+    
+  pool.deleteCategory(id)
+  res.send('Ok, deleted catg with ID ' + id)
+});
+router.get('/categories', auth.done, role.admin, function(req, res, next) {
+   pool.getAllCategory(categories => {
+    return res.render('categories', { categories });
+  })
+  
+});
+
 router.get('/admin', role.admin, auth.done, function(req, res, next) {
   return res.render('admin');
 });
@@ -176,14 +206,25 @@ router.post('/clients', auth.done, role.admin, function(req, res, next) {
      const message = "All fields are required!";
      res.redirect(`/clients?message=${encodeURIComponent(message)}`);
   } else {
-  const id = 
- pool.createClient(name, discount, type, pib, address, category, start, end, extraInfo)
- res.redirect('/clients')
+    pool.getCategoryByName(category, it => {
+        var catgId = null
+      if(typeof it === 'undefined') {
+          catgId = null
+      } else {
+          catgId = it.id
+      }
+      
+        console.log('IT2' + it)
+        pool.createClient(name, discount, type, pib, address, catgId, start, end, extraInfo)
+        res.redirect('/clients')
+    })
+
  }
   
 });
 router.post('/editclient', auth.done, role.admin, function(req, res, next) {
- var { id, name, discount, type, pib, address, category } = req.body;
+ var { id, name, discount, type, pib, address, category, end } = req.body;
+ 
  if(category == 'None') {
   category = ''
  }
@@ -192,10 +233,21 @@ router.post('/editclient', auth.done, role.admin, function(req, res, next) {
      const message = "All fields are required!";
      res.redirect(`/clients?message=${encodeURIComponent(message)}`);
   }else {
-
- pool.editClient(id, name, discount, type, pib, address, category, end,)
- res.redirect('/clients')
-  }
+    // Kad se edijue kategorija brise se iz baze skroz ??? Sredit to
+    pool.getCategoryByName(category, it => {
+      console.log('INFO: ' + category + it) // mora se ugaist reload da vidimo sta odje daje posle
+      var catgId = null
+      if(typeof it === 'undefined') {
+          catgId = null
+      } else {
+          catgId = it.id
+      }
+      
+        console.log('IT:' + it, "Catg:" + category)
+        pool.editClient(id, name, discount, type, pib, address,  catgId, end)
+        res.redirect('/clients') 
+    })
+  } 
   
 });
 router.post('/editclientinfo', auth.done, role.admin, function(req, res, next) {

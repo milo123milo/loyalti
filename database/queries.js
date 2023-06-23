@@ -8,6 +8,15 @@ function getAllCategory(callback){
     callback(rows);
   });
 }
+
+function getCategoryByName(name, callback){
+  const sql = 'SELECT * FROM category WHERE name = ?';
+  console.log('NAME: '+ name)
+  connection.query(sql, [name], (err, rows) => {
+    if (err) throw err;
+    callback(rows[0]);
+  });
+}
 function getUserById(id, callback) {
   const sql = 'SELECT * FROM users WHERE id = ?';
   connection.query(sql, [id], (err, rows) => {
@@ -239,7 +248,35 @@ function getAllReceiptItems( startDate, endDate, callback) {
     }
   });
 }
+function editCategory(id, name, duration, rangeval, discrange, startdisc, maxdisc) {
+  const sql = `UPDATE category
+SET
+  name = ?,
+  duration = ?,
+  rangeval = ?,
+  discrange = ?,
+  startdisc = ?,
+  maxdisc = ?
+WHERE
+  id = ?;`
+connection.query(sql, [name, duration, rangeval, discrange, startdisc, maxdisc,  id], (err, rows) => {
+    if (err) throw err;
+  });
+}
 
+function createCategory(name, duration, rangeval, discrange, startdisc, maxdisc) {
+  const sql = `INSERT INTO category (name, duration, rangeval, discrange, startdisc, maxdisc)
+VALUES (?, ?, ?, ?, ?, ?)`
+  connection.query(sql, [name, duration, rangeval, discrange, startdisc, maxdisc], (err, rows) => {
+    if (err) throw err;
+  });
+}
+function deleteCategory(id) {
+  const sql = `DELETE FROM category WHERE id = ?;`
+connection.query(sql, [id], (err, rows) => {
+    if (err) throw err;
+  });
+}
 
 module.exports = {
   getUserById,
@@ -262,5 +299,9 @@ module.exports = {
   getClientReceiptItems,
   getAllReceiptTotals,
   getAllReceiptItems,
-  getAllCategory
+  getAllCategory,
+  editCategory,
+  createCategory,
+  getCategoryByName,
+  deleteCategory
 };

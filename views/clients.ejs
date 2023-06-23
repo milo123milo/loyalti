@@ -175,7 +175,7 @@
                     </div>
                     <div class="filed">
                         <label for="role" class="form-label">Category:</label>
-                        <select id="edit-category" name="category" class="form-control" required>
+                        <select id="edit-category-tab" name="category" class="form-control" required>
                             <% category.forEach(function(category) { %>
                                 <option value="<%= category.name %>">
                                     <%= category.name %>
@@ -232,6 +232,11 @@
         </div>
     </div>
 </div>
+<style>
+    .margbtn {
+        margin-left: 10px;
+    }
+</style>
 
 
 <script>
@@ -267,9 +272,10 @@
               { id: 'pib', name: 'PIB', hidden: true },
               { id: 'address', name: 'Address', hidden: true },
               { id: 'info', name: 'Info', hidden: true },
-              { id: 'dcat', name: 'Category' },
+              { id: 'dcat', name: 'CategoryID', hidden: true },
               { id: 'start', name: 'Start', hidden: true },
               { id: 'end', name: 'End', formatter: (cell) => cell ? new Date(cell).toISOString().split('T')[0] : '' },
+              { id: 'category_name', name: 'Category' },
               {
                   id: 'actions',
                   name: 'Actions',
@@ -321,7 +327,7 @@
             search: true,
   
         })
-   
+       
     myGrid.render(document.getElementById("wrapper"));
      function deleteItem(id) {
             $.ajax({
@@ -337,7 +343,7 @@
                 }
             });
         }
-         
+            
     const startDateInput = document.getElementById('startDate');
         const endDateInput = document.getElementById('endDate');
 
@@ -384,9 +390,11 @@
         document.getElementById("edit-type").value = data[3].data
         document.getElementById("edit-pib").value = data[4].data
         document.getElementById("edit-address").value = data[5].data
-        document.getElementById("edit-category").value = data[7].data
+        console.log(data[10].data)
+        document.getElementById("edit-category-tab").value = data[10].data ? data[10].data : 'None';
         document.getElementById("edit-endDate").value = new Date(data[9].data).toISOString().split('T')[0];
-
+        
+        
     }
     var globalID = 0
     function editInfo(data) {
@@ -415,12 +423,12 @@
                     // Create input fields for name1 and name2
                     const input1 = document.createElement('input');
                     input1.type = 'text';
-                    input1.value = name1;
+                    input1.value = (name1 !== null && name1 !== undefined) ? name1 : '';;
                     input1.classList.add('form-control', 'frVal')
 
                     const input2 = document.createElement('input');
                     input2.type = 'text';
-                    input2.value = name2;
+                    input2.value = (name2 !== null && name2 !== undefined) ? name2 : '';;
                     input2.classList.add('form-control', 'frVal')
 
                     const button = document.createElement('Button');
@@ -491,7 +499,7 @@
                 input2.placeholder = 'Value';
                 input2.classList.add('form-control')
                 const button = document.createElement('Button');
-                button.classList.add('btn', 'btn-trash')
+                button.classList.add('btn', 'btn-trash', 'margbtn')
                 button.textContent = '✖'
                 button.onclick
                 button.addEventListener('click', function () {
@@ -517,7 +525,7 @@
 
                 // Expand the form info
                 const obj = expandFormInfo(infoString);
-
+                console.log(obj)
                 fetch('/clients', {
                 method: 'POST',
                 body: JSON.stringify(obj),
@@ -688,5 +696,26 @@
                 });
         }       
 
+ 
+                const currentPageURL = window.location.href;
 
+                // Check if the URL matches the expected format
+                if (currentPageURL.includes('/clients?search=')) {
+                    // Extract the value of the search parameter
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const searchValue = urlParams.get('search');
+                    const decodedSearchValue = decodeURIComponent(searchValue);
+                    console.log(decodedSearchValue);
+                    
+                    console.log(searchValue)
+                    const inputElement = document.querySelector('.gridjs-input.gridjs-search-input');
+                    // Create a new input event
+                    const inputEvent = new Event('input');
+                    // Simulate input by assigning the desired value
+                    inputElement.value = searchValue;
+                    // Dispatch the input event
+                    inputElement.dispatchEvent(inputEvent);
+                   
+                   
+                } 
 </script>

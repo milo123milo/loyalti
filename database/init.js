@@ -82,9 +82,10 @@ function initDatabase(){
             pib INT DEFAULT NULL,
             address TEXT,
             info TEXT, 
-            dcat TEXT,
+            dcat INT,
             start DATETIME,
-            end DATETIME
+            end DATETIME,
+            CONSTRAINT fk_clients_category FOREIGN KEY (dcat) REFERENCES category(id)
         );
 
             `;
@@ -151,16 +152,153 @@ function initDatabase(){
           (err, results) => {
             if (err) throw err;
 
-            console.log('Trigger created successfully');
+            console.log('Trigger *auto_id* created successfully');
           }
         );
       } else {
-        console.log('Trigger already exists');
+        console.log('Trigger *auto_id* already exists');
       }
+
+
+      
+
+
+    }
+  );
+
+            connection.query(
+    "SELECT COUNT(*) AS trigger_exists FROM information_schema.triggers WHERE trigger_name = 'update_category_name' AND event_object_table = 'clients'",
+    (err, results) => {
+      if (err) throw err;
+
+      const triggerExists = results[0].trigger_exists;
+
+      // create the trigger if it does not exist
+      if (triggerExists === 0) {
+        connection.query(
+          `CREATE TRIGGER update_category_name
+BEFORE UPDATE ON clients
+FOR EACH ROW
+BEGIN
+    IF NEW.dcat IS NOT NULL THEN
+        SET NEW.category_name = (SELECT name FROM category WHERE id = NEW.dcat);
+    ELSE
+        SET NEW.category_name = NULL;
+    END IF;
+END`,
+          (err, results) => {
+            if (err) throw err;
+
+            console.log('Trigger *update_category_name* created successfully');
+          }
+        );
+      } else {
+        console.log('Trigger *update_category_name* already exists');
+      }
+
+
+      
+
+
     }
   );
 
 
+              connection.query(
+    "SELECT COUNT(*) AS trigger_exists FROM information_schema.triggers WHERE trigger_name = 'update_category_name_insert' AND event_object_table = 'clients'",
+    (err, results) => {
+      if (err) throw err;
+
+      const triggerExists = results[0].trigger_exists;
+
+      // create the trigger if it does not exist
+      if (triggerExists === 0) {
+        connection.query(
+          `CREATE TRIGGER update_category_name_insert
+BEFORE INSERT ON clients
+FOR EACH ROW
+BEGIN
+    IF NEW.dcat IS NOT NULL THEN
+        SET NEW.category_name = (SELECT name FROM category WHERE id = NEW.dcat);
+    ELSE
+        SET NEW.category_name = NULL;
+    END IF;
+END;`,
+          (err, results) => {
+            if (err) throw err;
+
+            console.log('Trigger *update_category_name_insert* created successfully');
+          }
+        );
+      } else {
+        console.log('Trigger *update_category_name_insert* already exists');
+      }
+
+    }
+  );
+
+
+                connection.query(
+    "SELECT COUNT(*) AS trigger_exists FROM information_schema.triggers WHERE trigger_name = 'update_clients_category_name_after' AND event_object_table = 'category'",
+    (err, results) => {
+      if (err) throw err;
+
+      const triggerExists = results[0].trigger_exists;
+
+      // create the trigger if it does not exist
+      if (triggerExists === 0) {
+        connection.query(
+          `CREATE TRIGGER update_clients_category_name_after
+            AFTER UPDATE ON category
+            FOR EACH ROW
+            BEGIN
+                UPDATE clients
+                SET category_name = NEW.name
+                WHERE clients.dcat = OLD.id;
+            END`,
+          (err, results) => {
+            if (err) throw err;
+
+            console.log('Trigger *update_clients_category_name* created successfully');
+          }
+        );
+      } else {
+        console.log('Trigger *update_clients_category_name* already exists');
+      }
+
+    }
+  );
+
+  connection.query(
+    "SELECT COUNT(*) AS trigger_exists FROM information_schema.triggers WHERE trigger_name = 'remove_category_clients' AND event_object_table = 'category'",
+    (err, results) => {
+      if (err) throw err;
+
+      const triggerExists = results[0].trigger_exists;
+
+      // create the trigger if it does not exist
+      if (triggerExists === 0) {
+        connection.query(
+          `CREATE TRIGGER remove_category_clients
+            BEFORE DELETE ON category
+            FOR EACH ROW
+            BEGIN
+                UPDATE clients
+                SET dcat = NULL, category_name = NULL
+                WHERE dcat = OLD.id;
+            END;`,
+          (err, results) => {
+            if (err) throw err;
+
+            console.log('Trigger *remove_category_clients* created successfully');
+          }
+        );
+      } else {
+        console.log('Trigger *remove_category_clients* already exists');
+      }
+
+    }
+  );
 
 
         });

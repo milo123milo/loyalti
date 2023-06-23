@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cronJob = require('./cron'); 
 
 
 
@@ -53,7 +54,7 @@ app.use(passport.session())
 
 // view engine setup
 
-
+cronJob();
 
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.set('views', path.join(__dirname, 'views'));

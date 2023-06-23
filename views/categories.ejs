@@ -1,0 +1,420 @@
+<link rel="stylesheet" href="/stylesheets/header.css" />
+<link rel="stylesheet" href="/stylesheets/users.css" />
+<link rel="stylesheet" href="/stylesheets/fonts.css" />
+<link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+<script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js
+" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+<link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<div class="header">
+    <div class="h1">
+        Discount Categories
+    </div>
+    <div class="head-left">
+        <button style="margin-bottom: 4px;" id="create-button" type="button" class="bt btn btn-success" data-toggle="modal"
+            data-target="#createCatgModal">+ Create new</button>
+
+                <button onclick="window.location='/'" style="margin-bottom: 4px;" id="logout-button" type="button"
+                    class="bt btn btn-primary">
+                    < Back</button>
+    </div>
+</div>
+
+<div style="margin: 100px; display: flex; flex-wrap: wrap; justify-content: space-between;">
+    <% categories.forEach(function(category) { %>
+    <%- include('comps/category', {category: category}); %>
+    <% }); %>
+        
+</div>
+<style>
+    [contenteditable="true"]:active,
+[contenteditable="true"]:focus {
+  outline: 0px solid rgb(199, 209, 227);
+
+}
+</style>
+
+<div class="modal fade in" id="catgModal" tabindex="-1" role="dialog" aria-labelledby="catgModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title" id="exampleModalLongTitle" contenteditable="true" oninput="limitCharacters(this, 10)">Category
+                    </h5>
+                    <div onclick="doubleCheck() " style="cursor: pointer;color: #dc3545; margin-left: 1px; margin-top: 25px; font-size: 0.8rem;">Delete Category
+                    </div>
+                </div>
+                
+                
+                
+                <div style="display: flex;">
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form id="edit-userform" class="formm" onsubmit="return false;">
+                    <div class="filed" style="display: flex;">
+                        <div style="margin-right: 15px;">
+                            <label for="id" class="form-label">Duration:</label>
+                            <input type="text" id="duration-field" name="id" class="form-control" >
+                        </div>
+                        <div style="margin-right: 15px;">
+                            <label for="id" class="form-label">Start %:</label>
+                            <input type="text" id="start-field" name="id" class="form-control" >
+                        </div>
+                        <div>
+                            <label for="id" class="form-label">Max %:</label>
+                            <input type="text" id="max-field" name="id" class="form-control">
+                        </div>
+                    </div> 
+                    <div id="rangeCont" style="display: flex; justify-content: space-between;">
+                        <div id="ranges">
+                            <label for="id" class="form-label">Spendings €:</label>
+                        </div>
+                        <div id="discounts">
+                            <label for="id" class="form-label">Discount %:</label>
+                        </div>
+                    </div>
+                    <button id="add-range" style="margin-top: 10px;" type="button" class="btn btn-success">+ Add</button>
+                    
+                
+                </form>
+            </div>
+            <div class="modal-footer" style="justify-content: space-between !important;">
+                
+                <button id="edit-addinfo" type="button" onclick="viewClients()" class="btn btn-info">View Clients</button>
+                
+                
+                <div>
+                   
+                <button type="button" onclick="" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" onclick="getInputs()" type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade in" id="createCatgModal" tabindex="-1" role="dialog" aria-labelledby="createCatgModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Create category</h5>
+
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body">
+                <form id="create-userform" class="formm" onsubmit="return false;">
+                    <div class="filed">
+                        
+                            <label for="id" class="form-label">Name:</label>
+                            <input type="text" maxlength="10" id="create-name" name="id" class="form-control">
+                        
+                        
+                    </div>
+                    <div class="filed" style="display: flex;">
+                        <div style="margin-right: 15px;">
+                            <label for="id" class="form-label">Duration:</label>
+                            <input type="text" id="create-duration-field" name="id" class="form-control">
+                        </div>
+                        <div style="margin-right: 15px;">
+                            <label for="id" class="form-label">Start %:</label>
+                            <input type="text" id="create-start-field" name="id" class="form-control">
+                        </div>
+                        <div>
+                            <label for="id" class="form-label">Max %:</label>
+                            <input type="text" id="create-max-field" name="id" class="form-control">
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div id="create-ranges">
+                            <label for="id" class="form-label">Spendings €:</label>
+                            <div class="valuecont">
+                                <input  type="text" id="max-field" name="id" class="form-control inp">
+                            </div>
+                            
+                            
+                        </div>
+                        <div id="create-discounts">
+                            <label for="id" class="form-label">Discount %:</label>
+                            <div class="valuecont">
+                            <input  type="text" id="max-field" name="id" class="form-control inp">
+                            </div>
+                        </div>
+                    </div>
+                    <button id="create-add-range" style="margin-top: 10px;" type="button" class="btn btn-success">+
+                        Add</button>
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                
+                    <button type="button" onclick="" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="create-catg" onclick="getCreateInputs()" type="button" class="btn btn-primary">Create</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function limitCharacters(element, maxLength) {
+            if (element.innerText.length > maxLength) {
+                element.innerText = element.innerText.slice(0, maxLength);
+            }
+        }
+    var globalID = '0'
+    var globalName = ''
+    $(document).ready(function () {
+        
+
+        $('#add-range').click(function () {
+            var currentIndex = $('#ranges > .valuecont').length || 0;
+            console.log(currentIndex)
+            currentIndex++;
+
+            var rangeDiv = $('<div>').addClass('valuecont').attr('data-index', currentIndex);
+            var rangeInput = $('<input>').attr({
+                type: 'text',
+                name: 'range',
+                class: 'form-control inp'
+            });
+
+            var discountDiv = $('<div>').addClass('valuecont').attr('data-index', currentIndex);
+            var discountInput = $('<input>').attr({
+                type: 'text',
+                name: 'discount',
+                class: 'form-control inp'
+            });
+
+            var deleteButton = $('<button>').addClass('btn btn-trash').text('✖');
+
+            deleteButton.on('click', function () {
+                
+                if(currentIndex-1 > 0){
+                var dataIndex = $(this).parent().attr('data-index');
+                $('[data-index="' + dataIndex + '"]').remove();
+                console.log(currentIndex)
+                console.log("BUTTONNN");
+                }
+            });
+
+            rangeDiv.append(rangeInput);
+            discountDiv.append(discountInput, deleteButton);
+            $('#ranges').append(rangeDiv);
+            $('#discounts').append(discountDiv);
+        });
+
+        
+        
+        $('#create-add-range').click(function () {
+            var currentIndex = $('#create-ranges > .valuecont').length || 0;
+            console.log(currentIndex)
+            currentIndex++;
+
+            var rangeDiv = $('<div>').addClass('valuecont').attr('data-index', currentIndex);
+            var rangeInput = $('<input>').attr({
+                type: 'text',
+                name: 'range',
+                class: 'form-control inp'
+            });
+
+            var discountDiv = $('<div>').addClass('valuecont').attr('data-index', currentIndex);
+            var discountInput = $('<input>').attr({
+                type: 'text',
+                name: 'discount',
+                class: 'form-control inp'
+            });
+
+            var deleteButton = $('<button>').addClass('btn btn-trash').text('✖');
+
+            deleteButton.on('click', function () {
+                
+                var dataIndex = $(this).parent().attr('data-index');
+                $('[data-index="' + dataIndex + '"]').remove();
+                console.log("BUTTON");
+                
+            });
+
+            rangeDiv.append(rangeInput);
+            discountDiv.append(discountInput, deleteButton);
+            $('#create-ranges').append(rangeDiv);
+            $('#create-discounts').append(discountDiv);
+        });
+             $('#catgModal').on('hidden.bs.modal', function () {
+            // Delete all input fields within #ranges and #discounts divs
+            $('#ranges input').remove();
+             $('#discounts input').remove();
+             $('.btn-trash').remove();
+             
+        });
+                  
+
+          
+
+        });
+
+        function getInputs() {
+            var rangesValues = $('#ranges input').map(function () {
+                return $(this).val();
+            }).get();
+
+            // Get the values from input fields within #discounts div
+            var discountsValues = $('#discounts input').map(function () {
+                return $(this).val();
+            }).get();
+            
+            rangesValues = rangesValues.join(',');
+            discountsValues = discountsValues.join(',');
+
+            var duration = $('#duration-field').val();
+            var start = $('#start-field').val();
+            var max = $('#max-field').val();
+            var nameC = $('#exampleModalLongTitle').text();
+
+            var obj = {
+                id: globalID, 
+                name: nameC , 
+                duration: duration, 
+                rangeval: rangesValues, 
+                discrange: discountsValues, 
+                startdisc: start, 
+                maxdisc: max
+            }
+            console.log(obj)
+            // Output the values
+            fetch('/category', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj)
+                
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error: ' + response.status);
+                    }
+                    location.reload() 
+                })
+                .catch(error => {
+                    // Handle any errors
+                    console.error('Error:', error);
+                });
+
+        }
+
+        function isAnyPropertyEmpty(obj) {
+                for (var key in obj) {
+                    if (obj.hasOwnProperty(key) && (obj[key] === '' || obj[key] === null || obj[key] === undefined)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+        function getCreateInputs() {
+                var rangesValues = $('#create-ranges input').map(function () {
+                    return $(this).val();
+                }).get();
+
+                // Get the values from input fields within #discounts div
+                var discountsValues = $('#create-discounts input').map(function () {
+                    return $(this).val();
+                }).get();
+
+                rangesValues = rangesValues.join(',');
+                discountsValues = discountsValues.join(',');
+
+                var duration = $('#create-duration-field').val();
+                var start = $('#create-start-field').val();
+                var max = $('#create-max-field').val();
+                var nameC = $('#create-name').val();
+
+                var obj = {
+                    id: globalID,
+                    name: nameC,
+                    duration: duration,
+                    rangeval: rangesValues,
+                    discrange: discountsValues,
+                    startdisc: start,
+                    maxdisc: max
+                }
+                console.log(obj)
+
+                if (isAnyPropertyEmpty(obj)) {
+                window.alert('All fields are required!');
+                } else {
+                    fetch('/create-category', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(obj)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error: ' + response.status);
+                            }
+                            location.reload() // or response.json() if the server returns JSON
+                        })
+                        .catch(error => {
+                            // Handle any errors
+                            console.error('Error:', error);
+                        });
+
+                }
+                // Output the values
+               
+
+            }
+            
+
+            function viewClients() {
+                window.location.href = '/clients?search=' + globalName
+            }
+            function doubleCheck() {
+                var result = confirm('Are you sure you want to Delete ' + globalName);
+
+                if (result) {
+                    console.log(result + "staa")
+                    fetch(`/delete-category/` + globalID, {
+                        method: 'GET',
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                console.log('Category deleted successfully.');
+                                 location.reload()
+                            } else {
+                                console.error('Failed to delete category.');
+                                // Handle error cases here
+                            }
+                        })
+                        .catch(error => {
+                            console.error('An error occurred while deleting the category:', error);
+                            // Handle any network or other errors here
+                        });
+                } 
+            }
+             
+</script>

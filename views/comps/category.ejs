@@ -1,0 +1,176 @@
+
+<div class="component" id="warp<%= category.id %>"  style="display: flex; margin-top: 10px; margin-bottom: 70px; ">
+
+
+
+<div style="height: 198px; width: 500px;">
+    <div class="chart-wrapper" style="margin-right: 20px;">
+        <canvas id="chart<%= category.id %>"></canvas>
+    </div>
+</div>
+<div class="chTitle">
+    <div class="graphTitle">
+        <%= category.name %>
+    </div>
+    <div>
+        <div>Duration: <%= category.duration %> Month</div>
+        <div>Start Discount: <%= category.startdisc %> %</div>
+        <div>Max Discount: <%= category.maxdisc %> %</div>
+    </div>
+</div>
+</div>
+<style>
+    .inp {
+        margin-bottom: 10px;
+        margin-right: 10px;
+    }
+    .component {
+    /* Initial styles */
+    opacity: 1;
+    transform: scale(1);
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    cursor: pointer;
+}
+    .component:hover {
+        opacity: 0.8;
+        transform: scale(0.9);
+    }
+    .chTitle {
+            display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 18px;
+    margin-left: 15px;
+    margin-bottom: 14px;
+    }
+    .graphTitle {
+        font-size: 1.9rem;
+    font-weight: 500;
+       
+    }
+    .valuecont {
+            display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+            
+            $('#warp<%= category.id %>').click(function () {
+                 globalID = '<%= category.id %>'
+                 globalName = '<%= category.name %>'
+                 $('#exampleModalLongTitle').text('<%= category.name %>');
+                 $('#duration-field').val('<%= category.duration %>');
+                 $('#start-field').val('<%= category.startdisc %>');
+                 $('#max-field').val('<%= category.maxdisc %>');
+
+                // Sample arrays for ranges and discounts
+                var ranges = '<%= category.rangeval %>'
+                var discounts = '<%= category.discrange %>'
+                ranges = ranges.split(',')
+                discounts = discounts.split(',')
+
+                if (ranges.length < discounts.length) {
+                    // Add empty elements to array1
+                    for (var i = ranges.length; i < discounts.length; i++) {
+                        ranges.push('');
+                    }
+                } else if (discounts.length < ranges.length) {
+                    // Add empty elements to array2
+                    for (var i = discounts.length; i < ranges.length; i++) {
+                        discounts.push('');
+                    }
+                }
+                
+                // Creating divs with input fields for ranges
+                ranges.forEach(function (range, index) {
+                    var rangeDiv = $('<div>').addClass('valuecont').attr('data-index', index);
+                    var rangeInput = $('<input>').attr('type', 'text').val(range).addClass('form-control inp');
+                    rangeDiv.append(rangeInput);
+                    $('#ranges').append(rangeDiv);
+                });
+
+                // Creating divs with input fields and buttons for discounts
+                discounts.forEach(function (discount, index) {
+                    var discountDiv = $('<div>').addClass('valuecont');
+                    var discountInput = $('<input>').attr('type', 'text').val(discount).addClass('form-control inp');
+                    var button = $('<button></button>').addClass('btn btn-trash').text('✖');
+
+                    discountDiv.attr('data-index', index); // Set the data-index attribute to the discount div
+
+                    button.on('click', function () {
+                        var dataIndex = $(this).parent().attr('data-index');
+                        console.log(dataIndex) 
+                        if(dataIndex > 0){
+                        
+                        $(this).parent().remove(); // Remove the discount div
+                        $('#ranges > div[data-index="' + dataIndex + '"]').remove();
+                        // Remove the corresponding range div
+                        console.log("BUTTON");
+                        }
+                    });
+
+                    discountDiv.append(discountInput);
+                    discountDiv.append(button);
+                    $('#discounts').append(discountDiv);
+                });
+
+
+
+                $('#catgModal').modal('show');
+            });
+        });
+    (function() {
+    var spending = decodeEntities('<%= JSON.stringify(category.rangeval) %>');
+    var discounts = decodeEntities('<%= JSON.stringify(category.discrange) %>');
+    spending = spending.split(',').map(function (item) {
+        return parseInt(item.replace(/"/g, ''), 10);
+    });
+    discounts = discounts.split(',').map(function (item) {
+        return parseInt(item.replace(/"/g, ''), 10);
+    });
+
+    console.log(spending);
+    console.log(discounts);
+
+    // Create a new Chart.js instance and assign it to chart1
+    var chart1 = new Chart('chart<%= category.id %>', {
+        type: 'line',
+        data: {
+            labels: discounts,
+            datasets: [
+                {
+                    label: 'Spendings €',
+                    data: spending,
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+             plugins: {
+                
+                title: {
+                    display: true,
+                    text: 'Discount Percentage %',
+                    position: 'bottom'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    function decodeEntities(html) {
+        var txt = document.createElement('textarea');
+        txt.innerHTML = html;
+        return txt.value;
+    }
+    })();
+</script>
+

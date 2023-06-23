@@ -7,6 +7,9 @@
     align-items: flex-end;
     border-bottom: 1px solid #a6a6a6;
 }
+body::-webkit-scrollbar {
+    display: none !important;
+}
 .content {
    
     
