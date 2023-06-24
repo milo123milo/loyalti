@@ -1,0 +1,46 @@
+
+
+The function getCategoryBySpending takes three parameters: catgs (the array of category objects), categoryName (the name of the category you want to retrieve), and spendings (the amount of money spent).
+
+It searches for the category object with a matching categoryName in the catgs array using the find method.
+
+If the category is found, it proceeds with the calculations; otherwise, it returns null.
+
+It splits the rangeval and discrange strings of the category object into arrays. These arrays contain the range of spendings and the corresponding discount values, respectively.
+
+It initializes the discValue variable to the startdisc value of the category object.
+
+It iterates over the rangeval array to find the appropriate discount value based on the given spendings. For each value in the rangeval array, it checks if the spendings are less than that value. If it is, it stops the loop and keeps the previous discValue. If the spendings are greater than or equal to the value, it updates the discValue to the corresponding value from the discrange array.
+
+After the loop, it checks if the spendings are greater than the highest value in the rangeval array. If it is, it updates the discValue to the maxdisc value of the category object.
+
+Finally, it returns the determined discValue.
+
+In simpler terms, the function finds the appropriate discount value based on the spendings and the predefined ranges of a specific category. It iterates over the ranges and compares the spendings to find the corresponding discount value. If the spendings fall within a range, it returns the discount value associated with that range. If the spendings are lower than any range, it returns the starting discount value. If the spendings are higher than any range, it returns the maximum discount value.
+
+This way, you can use this function to determine the applicable discount based on the spendings for a specific category.
+
+
+
+****
+
+In this business scenario, there are different categories of products or services, each with its own discount structure based on the amount spent. The goal is to determine the applicable discount for a given category based on the amount spent by a customer.
+
+The catgs array represents the different categories, where each category object contains the following information:
+
+name: The name of the category.
+rangeval: A range of spendings for the category, represented as a comma-separated string of values.
+discrange: The corresponding discount values for each spending range, also represented as a comma-separated string of values.
+startdisc: The default discount value for spendings lower than the lowest range value.
+maxdisc: The maximum discount value for spendings higher than the highest range value.
+The logic of the function works as follows:
+
+It takes the name of the category and the amount spent as inputs.
+It searches for the category object with a matching name.
+If the category is found, it extracts the spending range and discount values associated with that category.
+It compares the amount spent with the spending ranges to determine the appropriate discount value:
+If the amount spent is lower than the lowest range value, it returns the starting discount value.
+If the amount spent falls within a range, it returns the corresponding discount value for that range.
+If the amount spent is higher than the highest range value, it returns the maximum discount value.
+If the category is not found, it returns null to indicate that the category doesn't exist.
+By using this logic, businesses can define customized discount structures for different categories based on the amount spent by customers. It allows them to incentivize higher spending and provide targeted discounts to maximize customer satisfaction and encourage repeat purchases.
