@@ -233,9 +233,9 @@ router.post('/editclient', auth.done, role.admin, function(req, res, next) {
      const message = "All fields are required!";
      res.redirect(`/clients?message=${encodeURIComponent(message)}`);
   }else {
-    // Kad se edijue kategorija brise se iz baze skroz ??? Sredit to
+    
     pool.getCategoryByName(category, it => {
-      console.log('INFO: ' + category + it) // mora se ugaist reload da vidimo sta odje daje posle
+      console.log('INFO: ' + category + it) 
       var catgId = null
       if(typeof it === 'undefined') {
           catgId = null

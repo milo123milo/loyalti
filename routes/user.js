@@ -4,6 +4,20 @@ var auth = require('./rules/authCheck');
 var pool = require('../database/queries')
 var receipt = require('./workers/getReceiptInfo')
 
+function generateUniqueID() {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear().toString().slice(-2);
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+  const day = currentDate.getDate().toString().padStart(2, '0');
+  const hours = currentDate.getHours().toString().padStart(2, '0');
+  const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+  const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+  const randomNum = Math.floor(Math.random() * 10000000000).toString().padStart(10, '0');
+
+  const uniqueID = year + month + day + hours + minutes + seconds + randomNum;
+  return uniqueID;
+}
+
 router.use((req, res, next) => {
   if (req.user === false) {
     return res.redirect('/login');
@@ -24,33 +38,61 @@ router.post('/checkBill', auth.done, (req, res) => {
   // Check for any errors in the request body
   const requestData = req.body;
 
-  // Do some processing with req.body here
-receipt.get(requestData.receipt).then(it => {
-
-  if (it && it.hasOwnProperty('iic')) {
-    pool.getClientById(requestData.card, (client, err) => {
-      
-      if (err) {
-        res.status(501).json({ message: 'Error Client', error: err });
-      } else {
-        const disc = parseInt(client[0].discount)
-        pool.createClientReceipts(it.id, it.iic, it.dateTimeCreated, it.sameTaxes[0].priceBeforeVat, it.totalPrice, disc, client[0].id, (err) => {
-          if (err) {
-            res.status(500).json({ message: 'Error Database', error: err });
+  function calculationAndInsertion(it) {
+              if (it && it.hasOwnProperty('iic')) {
+            pool.getClientById(requestData.card, (client, err) => {
+              
+              if (err) {
+                res.status(501).json({ message: 'Error Client', error: err });
+              } else {
+                const disc = parseInt(client[0].discount)
+                pool.createClientReceipts(it.id, it.iic, it.dateTimeCreated, it.sameTaxes[0].priceBeforeVat, it.totalPrice, disc, client[0].id, (err) => {
+                  if (err) {
+                    res.status(500).json({ message: 'Error Database', error: err });
+                  } else {
+                    for (let i = 0; i < it.items.length; i++) {
+                      const item = it.items[i];
+                      pool.createReceiptItem(it.id, item.name, item.quantity, item.unit, item.unitPriceBeforeVat, item.priceBeforeVat, item.priceAfterVat, disc, item.priceAfterVat - (item.priceAfterVat / 100) * disc); //DISCOUNT
+                    }
+                    res.status(200).json({ message: 'Request successful 200', data: it });
+                  }
+                });
+              }
+            });
           } else {
-            for (let i = 0; i < it.items.length; i++) {
-              const item = it.items[i];
-              pool.createReceiptItem(it.id, item.name, item.quantity, item.unit, item.unitPriceBeforeVat, item.priceBeforeVat, item.priceAfterVat, disc, item.priceAfterVat - (item.priceAfterVat / 100) * disc); //DISCOUNT
-            }
-            res.status(200).json({ message: 'Request successful 200', data: it });
+            res.status(400).json({ error: 'Error 400' });
           }
-        });
-      }
-    });
-  } else {
-    res.status(400).json({ error: 'Error 400' });
   }
+
+  // Do some processing with req.body here
+if(requestData.noreceipt === false){
+receipt.get(requestData.receipt).then(it => {
+  if(requestData.extraItems.status === true){
+    Array.prototype.push.apply(it.items, requestData.extraItems.items);
+    it.sameTaxes[0].priceBeforeVat = it.sameTaxes[0].priceBeforeVat + requestData.extraItems.sumNoVat
+    it.totalPrice = it.totalPrice + requestData.extraItems.sumWithVat
+  }
+  //Expand it.items, but addes items do like this format: item_name* with *
+  // recualculate Totals
+  calculationAndInsertion(it)
+
 });
+} else {
+  var today = new Date();
+
+  var sameTaxes = [
+    { priceBeforeVat: requestData.extraItems.sumNoVat}
+  ]
+  var it = {
+    id: generateUniqueID(), 
+    iic: '00000', 
+    dateTimeCreated: today,
+    items: requestData.extraItems.items,
+    sameTaxes: sameTaxes,
+    totalPrice: requestData.extraItems.sumWithVat
+  }
+  calculationAndInsertion(it)
+}
   console.log("Data:", "Good")
 
   // Send a response with status code 200 and a JSON payload

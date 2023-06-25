@@ -148,7 +148,32 @@ function initDatabase(){
       // create the trigger if it does not exist
       if (triggerExists === 0) {
         connection.query(
-          "CREATE TRIGGER auto_id BEFORE INSERT ON clients FOR EACH ROW BEGIN DECLARE ordinal INT; DECLARE year CHAR(2); DECLARE month CHAR(2); DECLARE type_num INT; SET ordinal = (SELECT COUNT(*) + 1 FROM clients); SET year = DATE_FORMAT(CURDATE(), '%y'); SET month = DATE_FORMAT(CURDATE(), '%m'); IF NEW.type = 'faktura' THEN SET type_num = 1; ELSEIF NEW.type = 'kasa' THEN SET type_num = 0; END IF; SET NEW.id = CONCAT(ordinal, year, month, type_num); END;",
+          `CREATE TRIGGER auto_id BEFORE INSERT ON clients
+FOR EACH ROW
+BEGIN
+    DECLARE year CHAR(2);
+    DECLARE month CHAR(2);
+    DECLARE unique_id INT;
+    DECLARE duplicate_count INT;
+
+    SET year = DATE_FORMAT(CURDATE(), '%y');
+    SET month = DATE_FORMAT(CURDATE(), '%m');
+    
+    SELECT COUNT(*) INTO duplicate_count
+    FROM clients
+    WHERE SUBSTRING(id, 1, 4) = CONCAT(year, month);
+    
+    IF duplicate_count = 0 THEN
+        SET NEW.id = CONCAT(year, month, '001');
+    ELSE
+        SELECT MAX(CAST(SUBSTRING(id, 5, 3) AS UNSIGNED)) + 1 INTO unique_id
+        FROM clients
+        WHERE SUBSTRING(id, 1, 4) = CONCAT(year, month);
+        
+        SET NEW.id = CONCAT(year, month, LPAD(unique_id, 3, '0'));
+    END IF;
+END;
+`,
           (err, results) => {
             if (err) throw err;
 

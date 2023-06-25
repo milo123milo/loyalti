@@ -16,6 +16,14 @@
 
 <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
 <style>
+    .itemfield {
+        margin-right: 10px;
+    }
+    .input-row {
+        display: flex;
+        width: 60%;
+        margin-bottom: 10px;
+    }
     .hide {
         display: none ;
     }
@@ -89,6 +97,15 @@
 .formbtn {
     height: calc(1.5em + 0.75rem + 2px) !important; 
 }
+.title-items {
+    margin-bottom: 10px;
+}
+.btn-trash {
+         color: #dc3545 !important;
+         background-color: #fff !important;
+         border-color: #fff !important;
+      
+ }
 </style>
 
 
@@ -133,21 +150,28 @@
     </div>
 </div>
 
-<div class="content">
+<div class="content" style="margin-block: 35px !important;">
 
-    <form class="forma" id="inputForm">
+    <form class="forma" id="inputForm" >
         <div class="form-group">
             <label for="receipt">Receipt</label>
-            <input onkeyup="autoTab(event)" type="text" name="receipt" class="form-control" id="receipt" placeholder="Scan QR Code">
+            <input onkeyup="autoTab(event)" type="text" name="receipt" class="form-control" id="receipt" placeholder="Scan QR Code" >
 
         </div>
         <div class="form-group">
             <label for="loyaltycard">Loyalty Card</label>
-            <input type="text" name="card" class="form-control" id="loyaltycard" placeholder="Scan QR Code">
+            <input type="text" name="card" class="form-control" id="loyaltycard" placeholder="Scan QR Code" required="true">
         </div>
-        <button data-toggle="modal" data-keyboard="false" data-backdrop="static" data-target="#exampleModalCenter" id="submit"  class="btn btn-primary formbtn">Submit</button>
+        <button id="submit"  class="btn btn-primary formbtn">Submit</button>
     </form>
+    
+    
 </div>
+<div style="margin-inline: 100px;">
+    <form id="myForm"></form>
+    <button style="margin-top: 10px;" id="addButton" class="btn btn-success">+ Add Items</button>
+</div>
+
 
 <script>
     
@@ -170,25 +194,69 @@
 
     
     const submitBtn = inputForm.querySelector("button[id='submit']");
-
+    
     submitBtn.addEventListener("click", function (event) {
         const form = document.getElementById('inputForm');
+        const itemsform = document.getElementById("myForm");
+        console.log(itemsform, itemsform.reportValidity())
+        console.log(form, form.reportValidity())
+        
+        
+        
+        
+        if (form.reportValidity() === false) {
+            console.log('false111')
+            check.classList.add('hide');
+            spiner.classList.add('hide')
+
+            $('#exampleModalCenter').modal('hide');
+
+            event.preventDefault();
+            return
+        }
+        if (itemsform.reportValidity() === false) {
+            console.log("false2222")
+            check.classList.add('hide');
+            spiner.classList.add('hide')
+
+            $('#exampleModalCenter').modal('hide');
+
+            event.preventDefault();
+            return
+        }
+        
+        $('#exampleModalCenter').modal('show');
+        
+        // Close the modal
+        // Example: add event listener to a close button inside the modal
+        
+        
         check.classList.add('hide');
         cross.classList.add('hide')
         spiner.classList.remove('hide')
         event.preventDefault(); // prevent default form submission behavior
-
+        
         // get the form data
         const input = {}
         input.receipt = document.getElementById("receipt").value;
         input.card = document.getElementById("loyaltycard").value;
+        input.extraItems =  getValues() 
+        
+        input.noreceipt = false
+        if(input.receipt === ''){
+            input.noreceipt = true
+        }
         
 
+        
 
-        //console.log("Data:" + JSON.stringify(input))
+        console.log("Data:" + JSON.stringify(input))
 
+        
+        
         // send the form data to the server using fetch
         //myModal.toggle();
+        
         fetch('/checkBill', {
             method: 'POST',
             headers: {
@@ -231,7 +299,7 @@
                     } else if (response.status == 500) {
                         alert("Duplicate receipt! This receipt already exist.")
                     } else {
-                        alert("Failed submission!")
+                     //   alert("Failed submission!")
                     }
 
                 }
@@ -256,5 +324,98 @@
 
             inputForm.reset();
             return
+        
     });
+
+
+
+        var form = document.getElementById("myForm");
+            var addButton = document.getElementById("addButton");
+            var inputCount = 0;
+            var titleCreated = false
+            
+
+            addButton.addEventListener("click", function () {
+                var inputRow = document.createElement("div");
+                
+                
+
+                
+                inputRow.className = "input-row";
+                const holders = ["Name", "Unit", "Quanity", "UnitPriceBeforeVat", "vatRate"]
+                for (var i = 0; i < 5; i++) {
+                    var input = document.createElement("input");
+                    input.name = "item" + inputCount;
+                    input.id = "input" + inputCount
+                    input.placeholder = holders[i]
+                    input.classList.add('form-control', 'itemfield')
+                    input.setAttribute('required', 'true')
+                    inputRow.appendChild(input);
+                    if(i === 4){
+                        input.value = '21'
+                        input.disabled = true
+                    }
+                    inputCount++;
+
+                }
+                const button = document.createElement('Button');
+                button.classList.add('btn', 'btn-trash')
+                button.textContent = '✖'
+                button.onclick
+                button.addEventListener('click', function () {
+                    const parentDiv = button.parentNode;
+                    parentDiv.remove();
+                });
+                if(titleCreated === false) {
+                    var title = document.createElement("div");
+                    title.className = 'title-items'
+                    title.textContent = 'Additional items:'
+                    form.appendChild(title);
+                }
+                form.appendChild(inputRow);
+                inputRow.appendChild(button)
+                titleCreated = true
+                
+            });
+
+            function getValues() {
+                
+                var inputRows = document.getElementsByClassName("input-row");
+                var values = [];
+                var sumNoVat = 0
+                var sumWithVat = 0
+
+                for (var i = 0; i < inputRows.length; i++) {
+                    
+                    var inputs = inputRows[i].getElementsByTagName("input");
+                    var rowValues = {};
+                    var fieldNames = ['id' ,'name', 'unit', 'quantity', 'unitPriceBeforeVat', 'vatRate', "priceBeforeVat", 'priceAfterVat']
+
+                    
+                    for (var j = 0; j < inputs.length; j++) {
+                        rowValues[fieldNames[j+1]] = inputs[j].value;
+                    }
+                    rowValues[fieldNames[0]] = '133310' + i
+                    rowValues[fieldNames[6]] = rowValues[fieldNames[3]] * rowValues[fieldNames[4]]
+                    rowValues[fieldNames[7]] = rowValues[fieldNames[6]] + (rowValues[fieldNames[6]] / 100) * rowValues[fieldNames[5]]
+                    sumNoVat = sumNoVat + rowValues[fieldNames[6]]
+                    sumWithVat = sumNoVat + (sumNoVat / 100) * rowValues[fieldNames[5]]
+
+                    if(rowValues[fieldNames[1]]  !== '' && sumNoVat > 0){
+                        values.push(rowValues);
+                    }
+                    
+                }
+                var status = false
+                if (sumNoVat > 0){
+                    status = true
+                }
+                var receiptElement = document.getElementById('receipt');
+                
+                
+                form.reportValidity()
+                console.log({items: values, sumNoVat, sumWithVat, status }); // Do whatever you want with the values
+                return { items: values, sumNoVat, sumWithVat, status };
+            }
+           
 </script>

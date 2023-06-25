@@ -1,5 +1,5 @@
-promjeiti end date kad se kreira tako da uzima vrijeme trajanja kategorije
+**
+tiger na manuelnu promjenu popusta
 
-to uradi tako sto imamo niz <% categroy[].duration %>
-
-napravimo funckiju koja gleda poziciju izabranog polja na selectu i tu poziciju ubacimo tamo u category niz i updajetujemo taj input
+**
+dodavanje stavki dodatnih na racun

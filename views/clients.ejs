@@ -240,6 +240,118 @@
 
 
 <script>
+    var catgs = <%- JSON.stringify(category) %>;
+    var selectElement = document.getElementById('edit-category');
+        function handleSelectChange() {
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+            var selectedValue = selectedOption.value;
+
+            // Find the array position of the selected value
+            var options = Array.from(selectElement.options);
+            var selectedIndex = options.findIndex(function (option) {
+                return option.value === selectedValue;
+            });
+
+            //get Start date + duration
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+
+            // Get today's date
+            const today = new Date().toISOString().split('T')[0];
+            const td = new Date()
+
+            startDateInput.setAttribute('min', today);
+            startDateInput.value = (today)
+
+            const startDate = new Date(startDateInput.value);
+
+            // Calculate the minimum end date //get position duration
+            const minEndDate = new Date(startDate.getFullYear(), startDate.getMonth() + getCatgSelc().duration, startDate.getDate());
+            console.log(minEndDate)
+            // Format the minimum end date as yyyy-MM-dd
+            const minEndDateFormatted = minEndDate.toISOString().split('T')[0];
+
+            // Set the minimum attribute for the end date input
+            endDateInput.setAttribute('min', minEndDateFormatted);
+            endDateInput.value = minEndDateFormatted
+            
+            const discountInput = document.getElementById('discount');
+            discountInput.value = getCatgSelc().startdisc
+            console.log("Array position of the selected element:", selectedIndex);
+            console.log(catgs[selectedIndex].duration !== undefined ? catgs[selectedIndex].duration : 0)
+        }
+        function  getCatgSelc() {
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+            var selectedValue = selectedOption.value;
+
+            // Find the array position of the selected value
+            var options = Array.from(selectElement.options);
+            var selectedIndex = options.findIndex(function (option) {
+                return option.value === selectedValue;
+            });
+            var duration = catgs[selectedIndex].duration !== undefined ? catgs[selectedIndex].duration : 0
+            var startdisc = catgs[selectedIndex].startdisc !== undefined ? catgs[selectedIndex].startdisc : 0
+            return { duration ,  startdisc }
+        }
+        selectElement.addEventListener('change', handleSelectChange);
+
+            var selectElement2 = document.getElementById('edit-category-tab');
+                function handleSelectChange2() {
+                    var selectedOption = selectElement2.options[selectElement.selectedIndex];
+                    var selectedValue = selectedOption.value;
+
+                    // Find the array position of the selected value
+                    var options = Array.from(selectElement2.options);
+                    var selectedIndex = options.findIndex(function (option) {
+                        return option.value === selectedValue;
+                    });
+
+                    //get Start date + duration
+                    
+                    const endDateInput = document.getElementById('edit-endDate');
+
+                    // Get today's date
+                    const today = new Date().toISOString().split('T')[0];
+                    const td = new Date()
+
+                    
+
+                    const startDate = new Date(startDateInput.value);
+
+                    // Calculate the minimum end date //get position duration
+                    const minEndDate = new Date(startDate.getFullYear(), startDate.getMonth() + getCatgSelc2().duration, startDate.getDate());
+                    console.log(minEndDate)
+                    // Format the minimum end date as yyyy-MM-dd
+                    const minEndDateFormatted = minEndDate.toISOString().split('T')[0];
+
+                    // Set the minimum attribute for the end date input
+                    endDateInput.setAttribute('min', minEndDateFormatted);
+                    endDateInput.value = minEndDateFormatted
+
+                    const discountInput = document.getElementById('edit-discount');
+                    discountInput.value = getCatgSelc2().startdisc
+
+                    console.log("Array position of the selected element:", selectedIndex);
+                    console.log(catgs[selectedIndex].duration !== undefined ? catgs[selectedIndex].duration : 0)
+                }
+                function getCatgSelc2() {
+                    var selectedOption = selectElement2.options[selectElement2.selectedIndex];
+                    var selectedValue = selectedOption.value;
+
+                    // Find the array position of the selected value
+                    var options = Array.from(selectElement2.options);
+                    var selectedIndex = options.findIndex(function (option) {
+                        return option.value === selectedValue;
+                    });
+                    var duration = catgs[selectedIndex].duration !== undefined ? catgs[selectedIndex].duration : 0
+                    var startdisc = catgs[selectedIndex].startdisc !== undefined ? catgs[selectedIndex].startdisc : 0
+                    return { duration, startdisc }
+
+
+                    
+                }
+                selectElement2.addEventListener('change', handleSelectChange2);
+
     $(document).ready(function () {
         // Find the modal element using its ID
         var modal = $('#infoModal');
@@ -356,9 +468,9 @@
 
         const startDate = new Date(startDateInput.value);
 
-            // Calculate the minimum end date
-            const minEndDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000); // Add 1 day
-
+            // Calculate the minimum end date //get position duration
+            const minEndDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, startDate.getDate());
+            console.log(minEndDate)
             // Format the minimum end date as yyyy-MM-dd
             const minEndDateFormatted = minEndDate.toISOString().split('T')[0];
 
@@ -373,9 +485,8 @@
             const startDate = new Date(startDateInput.value);
             
             // Calculate the minimum end date
-            const minEndDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000); // Add 1 day
-
-            // Format the minimum end date as yyyy-MM-dd
+            const minEndDate = new Date(startDate.getFullYear(), startDate.getMonth() + getCatgSelc().duration, startDate.getDate());
+          
             const minEndDateFormatted = minEndDate.toISOString().split('T')[0];
 
             // Set the minimum attribute for the end date input
@@ -718,4 +829,34 @@
                    
                    
                 } 
+                var inputElement = document.getElementById('edit-discount');
+
+                    // Function to handle the value change event
+                    function handleInputChange() {
+                        const endDateInput = document.getElementById('edit-endDate');
+
+                        // Get today's date
+                        const today = new Date().toISOString().split('T')[0];
+                        const td = new Date()
+
+
+
+                        const startDate = new Date(startDateInput.value);
+
+                        // Calculate the minimum end date //get position duration
+                        const minEndDate = new Date(startDate.getFullYear(), startDate.getMonth() + getCatgSelc2().duration, startDate.getDate());
+                        console.log(minEndDate)
+                        // Format the minimum end date as yyyy-MM-dd
+                        const minEndDateFormatted = minEndDate.toISOString().split('T')[0];
+
+                        // Set the minimum attribute for the end date input
+                        endDateInput.setAttribute('min', minEndDateFormatted);
+                        endDateInput.value = minEndDateFormatted
+                    }
+
+                    // Add event listener for the input event
+                inputElement.addEventListener('input', handleInputChange);
+
+                
+
 </script>
