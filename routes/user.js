@@ -10,12 +10,13 @@ function generateUniqueID() {
   const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
   const day = currentDate.getDate().toString().padStart(2, '0');
   const hours = currentDate.getHours().toString().padStart(2, '0');
-  const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-  const seconds = currentDate.getSeconds().toString().padStart(2, '0');
-  const randomNum = Math.floor(Math.random() * 10000000000).toString().padStart(10, '0');
+  
+  const randomNum = Math.floor(Math.random() * 90) + 10;
+  const uniqueID = year + month + day + randomNum ;
 
-  const uniqueID = year + month + day + hours + minutes + seconds + randomNum;
+  console.log(uniqueID);
   return uniqueID;
+  
 }
 
 router.use((req, res, next) => {
@@ -45,13 +46,21 @@ router.post('/checkBill', auth.done, (req, res) => {
               if (err) {
                 res.status(501).json({ message: 'Error Client', error: err });
               } else {
+                //Receipt is inputed with precalcultaed discount so we need to add discount to total pice
                 const disc = parseInt(client[0].discount)
+                console.log(disc)
+                it.sameTaxes[0].priceBeforeVat = it.sameTaxes[0].priceBeforeVat + (it.sameTaxes[0].priceBeforeVat/100) * disc
+                it.totalPrice = it.totalPrice + (it.totalPrice/100)*disc
+                // ****************
+                
                 pool.createClientReceipts(it.id, it.iic, it.dateTimeCreated, it.sameTaxes[0].priceBeforeVat, it.totalPrice, disc, client[0].id, (err) => {
                   if (err) {
                     res.status(500).json({ message: 'Error Database', error: err });
+                    console.log(err)
                   } else {
                     for (let i = 0; i < it.items.length; i++) {
                       const item = it.items[i];
+
                       pool.createReceiptItem(it.id, item.name, item.quantity, item.unit, item.unitPriceBeforeVat, item.priceBeforeVat, item.priceAfterVat, disc, item.priceAfterVat - (item.priceAfterVat / 100) * disc); //DISCOUNT
                     }
                     res.status(200).json({ message: 'Request successful 200', data: it });
@@ -98,5 +107,7 @@ receipt.get(requestData.receipt).then(it => {
   // Send a response with status code 200 and a JSON payload
   
 });
+
+
 
 module.exports = router;

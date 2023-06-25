@@ -417,5 +417,12 @@
                 console.log({items: values, sumNoVat, sumWithVat, status }); // Do whatever you want with the values
                 return { items: values, sumNoVat, sumWithVat, status };
             }
+
+            $('#exampleModalCenter').on('hide.bs.modal', function (e) {
+                    $(".input-row").remove();
+                    $(".title-items").remove();
+                    titleCreated = false
+                    
+                });
            
 </script>

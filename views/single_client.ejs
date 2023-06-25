@@ -37,7 +37,7 @@
 </div>
 
 
-<div id="wrapper" style="margin-inline: 100px;"></div>
+<div id="wrapper" style="margin-inline: 100px; margin-bottom: 60px;"></div>
 
 
 <!-- Modal -->
@@ -103,13 +103,13 @@
         search: true,
 
     }).render(document.getElementById("wrapperItems")) 
-
+  var options = { hour: '2-digit', minute: '2-digit', hour12: false };
   const myGrid = new  gridjs.Grid({
             
           columns: [
               { id: 'id', name: 'ID' },
               { id: 'iic', name: 'IIC' },
-              { id: 'date', name: 'Date', formatter: (cell) => new Date(cell).toLocaleDateString() },
+              { id: 'date', name: 'Date', formatter: (cell) => new Date(cell).toLocaleDateString() + ' ' + new Date(cell).toLocaleString(undefined, options) },
               { id: 'total', name: 'Total €'},
               { id: 'totalVAT', name: 'TotalVAT €' },
               { id: 'discount', name: 'Discount %' },
