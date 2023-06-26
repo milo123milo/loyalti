@@ -10,7 +10,8 @@ const i18n = require('i18n');
 i18n.configure({
   locales: ['en', 'sr'], // Supported locales
   directory: __dirname + '/locales', // Path to your locale files
-  defaultLocale: 'sr', // Default locale
+  defaultLocale: 'sr',
+  fallbackLng: 'sr' ,// Default locale
   cookie: 'lang',
   objectNotation: true // Cookie name to store the locale
 });
@@ -83,13 +84,13 @@ app.use(i18n.init);
 
 
 
-
+/*
 app.use(function (req, res, next) {
     var locale = 'sr'
     req.setLocale(locale)
     res.locals.language = locale
     next();
-}) 
+}) */
 
 app.get('/change-language-en', (req, res) => {
   const locale = 'en'; // Set the desired locale
