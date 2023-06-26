@@ -88,7 +88,7 @@ app.use(function (req, res, next) {
     var locale = 'sr'
     req.setLocale(locale)
     res.locals.language = locale
-    
+    next();
 }) 
 
 app.get('/change-language-en', (req, res) => {
