@@ -83,13 +83,13 @@ app.use(i18n.init);
 
 
 
-/*
+
 app.use(function (req, res, next) {
     var locale = 'sr'
     req.setLocale(locale)
     res.locals.language = locale
-    next()
-}) */
+    
+}) 
 
 app.get('/change-language-en', (req, res) => {
   const locale = 'en'; // Set the desired locale
