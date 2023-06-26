@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "devstart": "nodemon node ./bin/www"
+    "devstart": "nodemon node ./bin/www",
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "bootstrap": "^3.4.1",
