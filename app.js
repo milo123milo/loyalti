@@ -10,7 +10,7 @@ const i18n = require('i18n');
 i18n.configure({
   locales: ['en', 'sr'], // Supported locales
   directory: __dirname + '/locales', // Path to your locale files
-  defaultLocale: 'en', // Default locale
+  defaultLocale: 'sr', // Default locale
   cookie: 'lang',
   objectNotation: true // Cookie name to store the locale
 });
