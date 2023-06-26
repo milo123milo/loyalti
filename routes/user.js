@@ -3,6 +3,7 @@ var router = express.Router();
 var auth = require('./rules/authCheck');
 var pool = require('../database/queries')
 var receipt = require('./workers/getReceiptInfo')
+const axios = require('axios');
 
 function generateUniqueID() {
   const currentDate = new Date();
@@ -31,7 +32,19 @@ router.use((req, res, next) => {
 //Add routes below
 
 router.get('/user', auth.done, function(req, res, next) {
-  res.render('user');
+
+
+  axios.get('/change-language-sr')
+      .then(response => {
+        res.render('user');
+        console.log("AAAA")
+        console.log(response.data);
+      })
+      .catch(error => {
+        res.render('user');
+        console.error(error);
+      });
+  
 });
 router.get('/input', auth.done, function(req, res, next) {
   res.render('input');
