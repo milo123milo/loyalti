@@ -29,11 +29,11 @@
 
 <div class="header">
     <div class="h1">
-        Users
+        <%= __('users.users')%>
     </div>
     <div class="head-left">
-        <button  style="margin-bottom: 4px;" id="logout-button" type="button" class=" bt btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">+ Create new</button>
-        <button onclick="window.location='/'" style="margin-bottom: 4px;" id="logout-button" type="button" class="bt btn btn-primary">< Back</button>
+        <button  style="margin-bottom: 4px;" id="logout-button" type="button" class=" bt btn btn-success" data-toggle="modal" data-target="#exampleModalCenter"><%= __('users.create')%></button>
+        <button onclick="window.location='/'" style="margin-bottom: 4px;" id="logout-button" type="button" class="bt btn btn-primary"><%= __('users.back')%></button>
     </div>
 </div>
 <% if (message) { %>
@@ -53,7 +53,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Create new user</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle"><%= __('users.createu')%></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -61,15 +61,15 @@
             <div class="modal-body">
                 <form  id="userform" class="formm" action="/users" method="POST">
                     <div class="filed">
-                        <label for="username" class="form-label">Username:</label>
+                        <label for="username" class="form-label"><%= __('users.username')%>:</label>
                         <input type="text" id="username" name="username" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="password" class="form-label">Password:</label>
+                        <label for="password" class="form-label"><%= __('users.password')%>:</label>
                         <input type="text" id="password" name="password" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="role" class="form-label">Role:</label>
+                        <label for="role" class="form-label"><%= __('users.role')%>:</label>
                         <select id="role" name="role" class="form-control" required>
                             <% types.forEach(function(type) { %>
                                 <option value="<%= type %>">
@@ -84,8 +84,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit"  onclick="document.getElementById('userform').submit();" type="button" class="btn btn-primary">Create</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= __('users.close')%></button>
+                <button type="submit"  onclick="document.getElementById('userform').submit();" type="button" class="btn btn-primary"><%= __('users.createu')%></button>
             </div>
         </div>
     </div>
@@ -96,7 +96,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Edit user</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle"><%= __('users.edit')%></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -109,15 +109,15 @@
                         <input type="text" id="edit-id" name="id" class="form-control" readonly>
                     </div>
                     <div class="filed">
-                        <label for="username" class="form-label">Username:</label>
+                        <label for="username" class="form-label"><%= __('users.username')%>:</label>
                         <input type="text" id="edit-username" name="username" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="password" class="form-label">Password:</label>
+                        <label for="password" class="form-label"><%= __('users.password')%>:</label>
                         <input type="text" id="edit-password" name="password" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="role" class="form-label">Role:</label>
+                        <label for="role" class="form-label"><%= __('users.role')%>:</label>
                         <select id="edit-role" name="role" class="form-control" required>
                             <% types.forEach(function(type) { %>
                                 <option value="<%= type %>">
@@ -132,9 +132,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= __('users.close')%></button>
                 <button type="submit" onclick="document.getElementById('edit-userform').submit();" type="button"
-                    class="btn btn-primary">Confirm</button>
+                    class="btn btn-primary"><%= __('users.edit')%></button>
             </div>
         </div>
     </div>
@@ -151,24 +151,24 @@
             
           columns: [
               { id: 'id', name: 'ID' },
-              { id: 'username', name: 'Username' },
-              { id: 'password', name: 'Password' },
-              { id: 'role', name: 'Role' },
+              { id: 'username', name: "<%= __('users.username')%>" },
+              { id: 'password', name: "<%= __('users.password')%>" },
+              { id: 'role', name: "<%= __('users.role')%>" },
               {
                   id: 'actions',
-                  name: 'Actions',
+                  name: "<%= __('users.action')%>",
                   formatter: (_, row) => {
                       const button = gridjs.h('button', {
                         class: 'btn btn btn-danger'  ,
                         onClick: () => deleteItem(row.cells[0].data)
-                      }, 'Delete');
+                      }, "<%= __('users.actions.delete')%>");
                       const buttonEdit = gridjs.h('button', {
                           class: 'btn btn btn-success',
                           style: 'margin-left: 10px;',
                           'data-toggle': "modal" , 
                           'data-target': "#editModal",
                           onClick: () => editItem(row.cells)
-                      }, 'Edit');
+                      }, "<%= __('users.actions.edit')%>");
                       return gridjs.h('td', {}, button, buttonEdit);
                   },
               },

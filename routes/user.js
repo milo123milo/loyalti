@@ -26,6 +26,8 @@ router.use((req, res, next) => {
   next();
 });
 
+
+
 //Add routes below
 
 router.get('/user', auth.done, function(req, res, next) {

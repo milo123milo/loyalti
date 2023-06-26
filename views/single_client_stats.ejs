@@ -60,32 +60,32 @@
 
         <button onclick="window.history.back()" style="margin-bottom: 4px;" id="logout-button" type="button"
             class="bt btn btn-primary">
-            < Back</button>
+            <%= __('singlestats.back')%></button>
     </div>
 </div>
 
 <div class="content">
     <div class="row">
         <div class="col-lg-3 col-sm-6" style="min-width: 220px;">
-            <label for="startDate">Start</label>
+            <label for="startDate"><%= __('singlestats.start')%></label>
             <input id="startDate" class="form-control" type="date" />
             <!-- <span id="startDateSelected"></span> -->
         </div>
         <div class="col-lg-3 col-sm-6" style="min-width: 220px;" >
-            <label for="endDate">End</label>
+            <label for="endDate"><%= __('singlestats.end')%></label>
             <input id="endDate" class="form-control" type="date" />
         <!--  <span id="endDateSelected"></span>-->
         </div>
         <div class="btncont">
-            <button onclick="getItemsData()" id="update"class="btn btn-primary formbtn">Update ⟲</button>
+            <button onclick="getItemsData()" id="update"class="btn btn-primary formbtn"><%= __('singlestats.update')%></button>
         </div>
 
     </div>
     <div class="info">
-        <div style="margin-right: 20px;">Discount: <span style="color: #2498e9;"><span id="discinfo"></span>%</span> </div>
-        <div style="margin-right: 20px;">Total purchased: <span style="color: #2498e9;"><span id="purcinfo"></span> € </span> </div>
-        <div style="margin-right: 20px;">Total paid: <span style="color: #2498e9;"><span id="paidinfo"></span> €</span> </div>
-        <div style="margin-right: 20px;">Saved: <span style="color: #2498e9;"><span id="savedinfo"></span> €</span> </div>
+        <div style="margin-right: 20px;"><%= __('singlestats.discount')%>: <span style="color: #2498e9;"><span id="discinfo"></span>%</span> </div>
+        <div style="margin-right: 20px;"><%= __('singlestats.totalpu')%>: <span style="color: #2498e9;"><span id="purcinfo"></span> € </span> </div>
+        <div style="margin-right: 20px;"><%= __('singlestats.totalpaid')%>: <span style="color: #2498e9;"><span id="paidinfo"></span> €</span> </div>
+        <div style="margin-right: 20px;"><%= __('singlestats.saved')%>: <span style="color: #2498e9;"><span id="savedinfo"></span> €</span> </div>
     </div>
 </div>
 
@@ -206,12 +206,12 @@
         const myGrid = new gridjs.Grid({
 
             columns: [
-                { id: 'name', name: 'Name' },
-                { id: 'totalQuantity', name: 'Quantity' },
-                { id: 'pricePerPiece', name: 'PricePerPiece' },
-                { id: 'totalPriceVAT', name: 'TotalPriceVAT' },
-                { id: 'discount', name: 'Discount' },
-                { id: 'totalDisc', name: 'TotalPriceDiscount' },
+                { id: 'name', name:  "<%= __('singlestats.table.name')%>" },
+                { id: 'totalQuantity', name: "<%= __('singlestats.table.quantity')%>" },
+                { id: 'pricePerPiece', name: "<%= __('singlestats.table.ppp')%> €" },
+                { id: 'totalPriceVAT', name: "<%= __('singlestats.table.totalvat')%> €" },
+                { id: 'discount', name: "<%= __('singlestats.table.discount')%> %" },
+                { id: 'totalDisc', name: "<%= __('singlestats.table.totaldisc')%> €" },
                
             ],
             pagination: {
@@ -240,7 +240,7 @@
             data: {
                 labels: [],
                 datasets: [{
-                    label: 'Spendings €',
+                    label: "<%= __('singlestats.spendings')%> €",
                     data: [],
                     borderWidth: 1,
                     tension: 0.3
@@ -251,7 +251,7 @@
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Discounted Client Spending',
+                        text: "<%= __('singlestats.dcs')%>",
                         position: 'bottom'
                     }
                 },
@@ -268,7 +268,7 @@
                 data: {
                     labels: [],
                     datasets: [{
-                        label: 'Price €',
+                        label: "<%= __('singlestats.price')%> €",
                         data: [],
                         borderWidth: 1,
                        
@@ -284,7 +284,7 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Highest-Spending Client Items',
+                            text: "<%= __('singlestats.hsci')%>",
                             position: 'bottom'
                         }
                     },
@@ -296,7 +296,7 @@
                     data: {
                         labels: [],
                         datasets: [{
-                            label: 'Quantity',
+                            label: "<%= __('singlestats.quantity')%>",
                             data: [],
                             borderWidth: 1,
                             
@@ -312,7 +312,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: "Client's Top Items by Quantity",
+                                text: "<%= __('singlestats.ctiq')%>",
                                 position: 'bottom'
                             }
                         }

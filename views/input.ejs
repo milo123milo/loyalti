@@ -111,13 +111,13 @@
 
 <div class="header">
     <div class="h1">
-       Input
+    <%= __('input.input')%>
     </div>
     <div class="head-left">
 
         <button onclick="window.history.back()" style="margin-bottom: 4px;" id="logout-button" type="button"
             class="bt btn btn-primary">
-            < Back</button>
+            <%= __('input.back')%></button>
     </div>
 </div>
 <div class="modal fade in" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
@@ -154,22 +154,22 @@
 
     <form class="forma" id="inputForm" >
         <div class="form-group">
-            <label for="receipt">Receipt</label>
+            <label for="receipt"><%= __('input.receipt')%></label>
             <input onkeyup="autoTab(event)" type="text" name="receipt" class="form-control" id="receipt" placeholder="Scan QR Code" >
 
         </div>
         <div class="form-group">
-            <label for="loyaltycard">Loyalty Card</label>
+            <label for="loyaltycard"><%= __('input.card')%></label>
             <input type="text" name="card" class="form-control" id="loyaltycard" placeholder="Scan QR Code" required="true">
         </div>
-        <button id="submit"  class="btn btn-primary formbtn">Submit</button>
+        <button id="submit"  class="btn btn-primary formbtn"><%= __('input.submit')%></button>
     </form>
     
     
 </div>
 <div style="margin-inline: 100px;">
     <form id="myForm"></form>
-    <button style="margin-top: 10px;" id="addButton" class="btn btn-success">+ Add Items</button>
+    <button style="margin-top: 10px;" id="addButton" class="btn btn-success"><%= __('input.add')%></button>
 </div>
 
 
@@ -342,7 +342,7 @@
 
                 
                 inputRow.className = "input-row";
-                const holders = ["Name", "Unit", "Quanity", "UnitPriceBeforeVat", "vatRate"]
+                const holders = ["<%= __('input.items.name')%>", "<%= __('input.items.unit')%>", "<%= __('input.items.quanity')%>", "<%= __('input.items.unitprice')%>", "vatRate"]
                 for (var i = 0; i < 5; i++) {
                     var input = document.createElement("input");
                     input.name = "item" + inputCount;
@@ -369,7 +369,7 @@
                 if(titleCreated === false) {
                     var title = document.createElement("div");
                     title.className = 'title-items'
-                    title.textContent = 'Additional items:'
+                    title.textContent = '<%= __('input.additional')%>'
                     form.appendChild(title);
                 }
                 form.appendChild(inputRow);

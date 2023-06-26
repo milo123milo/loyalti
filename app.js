@@ -5,6 +5,18 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cronJob = require('./cron'); 
 
+const i18n = require('i18n');
+
+i18n.configure({
+  locales: ['en', 'sr'], // Supported locales
+  directory: __dirname + '/locales', // Path to your locale files
+  defaultLocale: 'en', // Default locale
+  cookie: 'lang',
+  objectNotation: true // Cookie name to store the locale
+});
+
+
+
 
 
 const passport = require('passport');
@@ -66,11 +78,40 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('fonts'))
+app.use(i18n.init);
 
+
+
+
+/*
+app.use(function (req, res, next) {
+    var locale = 'sr'
+    req.setLocale(locale)
+    res.locals.language = locale
+    next()
+}) */
+
+app.get('/change-language-en', (req, res) => {
+  const locale = 'en'; // Set the desired locale
+  res.cookie('lang', locale);
+  req.setLocale(locale);
+  res.locals.language = locale;
+  
+  res.redirect('/');
+});
+app.get('/change-language-sr', (req, res) => {
+  const locale = 'sr'; // Set the desired locale
+  res.cookie('lang', locale);
+  req.setLocale(locale);
+  res.locals.language = locale;
+  
+  res.redirect('/');
+});
 
 app.use('/', indexRouter);
 app.use('/', usersRouter);
 app.use('/', adminRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

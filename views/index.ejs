@@ -3,32 +3,33 @@
     <link rel="stylesheet" href="/stylesheets/index.css" />
     <link rel="stylesheet" href="/stylesheets/fonts.css" />
     <link rel="stylesheet" href="/stylesheets/header.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css" />
     
 </head>
 
-<%- include('comps/header', {name: name, title: 'Menu'}); %>
+<%- include('comps/header', {name: name, title: __('menu.menu')}); %>
 
 </div>
 
 <div class="menu">
     <div class="admin-items">
             <% if(role==='root'){ %>
-                <%- include('comps/card', {admin: true,href: '/users' , link: '/images/user.svg' , title: "Users" }); %>
+                <%- include('comps/card', {admin: true,href: '/users' , link: '/images/user.svg' , title:  __('menu.users') }); %>
             <% } %>
 
             <% if(role==='admin' || role==='root' ){ %>
-                <%- include('comps/card', {admin: true, href: '/clients' , link: '/images/clients.svg' , title: "Clients" }); %>
+                <%- include('comps/card', {admin: true, href: '/clients' , link: '/images/clients.svg' , title: __('menu.clients') }); %>
             <% } %>
             <% if(role==='admin' || role==='root' ){ %>
-                <%- include('comps/card', {admin: true, href: '/stats' , link: '/images/data.svg' , title: "General Stats" }); %>
+                <%- include('comps/card', {admin: true, href: '/stats' , link: '/images/data.svg' , title: __('menu.general') }); %>
             <% } %>
 
             <% if(role==='admin' || role==='root' ){ %>
-                <%- include('comps/card', {admin: true, href: '/categories' , link: '/images/percent.svg' , title: "Categories" }); %>
+                <%- include('comps/card', {admin: true, href: '/categories' , link: '/images/percent.svg' , title:  __('menu.categories') }); %>
                     <% } %>
 
             <% if(role==='user' || role==='root'){ %>
-                <%- include('comps/card', {admin: true, href: '/input' , link: '/images/qr.svg' , title: "Input" }); %>
+                <%- include('comps/card', {admin: true, href: '/input' , link: '/images/qr.svg' , title:  __('menu.input') }); %>
             <% } %>
     </div>
     

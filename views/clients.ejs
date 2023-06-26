@@ -28,13 +28,13 @@
 
 <div class="header">
     <div class="h1">
-        Clients
+        <%= __('clients.clients')%>
     </div>
     <div class="head-left">
         <% if(role==='root' ){ %>
-        <button  style="margin-bottom: 4px;" id="logout-button" type="button" class=" bt btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">+ Create new</button>
+        <button  style="margin-bottom: 4px;" id="logout-button" type="button" class=" bt btn btn-success" data-toggle="modal" data-target="#exampleModalCenter"><%= __('clients.create')%></button>
         <% } %>
-        <button onclick="window.location='/'" style="margin-bottom: 4px;" id="logout-button" type="button" class="bt btn btn-primary">< Back</button>
+        <button onclick="window.location='/'" style="margin-bottom: 4px;" id="logout-button" type="button" class="bt btn btn-primary"><%= __('clients.back')%></button>
     </div>
 </div>
 <% if (message) { %>
@@ -54,7 +54,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Create new user</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle"><%= __('clients.modal.create')%></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -62,15 +62,15 @@
             <div class="modal-body">
                 <form  id="userform" class="formm" action="/clients" method="POST">
                     <div class="filed">
-                        <label for="username" class="form-label">Name:</label>
+                        <label for="username" class="form-label"><%= __('clients.name')%>:</label>
                         <input type="text" id="name" name="name" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="password" class="form-label">Discount [%]:</label>
+                        <label for="password" class="form-label"><%= __('clients.discount')%> [%]:</label>
                         <input type="text" id="discount" name="discount" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="role" class="form-label">Type:</label>
+                        <label for="role" class="form-label"><%= __('clients.type')%>:</label>
                         <select id="type" name="type" class="form-control" required>
                             <% types.forEach(function(type) { %>
                                 <option value="<%= type %>">
@@ -80,15 +80,15 @@
                         </select>
                     </div>
                     <div class="filed">
-                        <label for="role" class="form-label">PIB:</label>
+                        <label for="role" class="form-label"><%= __('clients.modal.pib')%>:</label>
                         <input type="text" id="pib" name="pib" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="role" class="form-label">Address:</label>
+                        <label for="role" class="form-label"><%= __('clients.modal.address')%>:</label>
                         <input type="text" id="address" name="address" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="role" class="form-label">Category:</label>
+                        <label for="role" class="form-label"><%= __('clients.modal.category')%>:</label>
                         <select id="edit-category" name="category" class="form-control" required>
                             <% category.forEach(function(category) { %>
                                 <option value="<%= category.name %>">
@@ -99,12 +99,12 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-3 col-sm-6" style="min-width: 220px;">
-                            <label for="startDate">Start</label>
+                            <label for="startDate"><%= __('clients.start')%></label>
                             <input id="startDate" name="start" class="form-control" type="date"/>
                             <!-- <span id="startDateSelected"></span> -->
                         </div>
                         <div class="col-lg-3 col-sm-6" style="min-width: 220px;">
-                            <label for="endDate">End</label>
+                            <label for="endDate"><%= __('clients.end')%></label>
                             <input id="endDate" name="end" class="form-control" type="date" />
                             <!--  <span id="endDateSelected"></span>-->
                         </div>
@@ -113,7 +113,7 @@
                     <div class="field">
                         <div id="infocont" style="padding-top: 10px;" class="filed"></div>
                         <div class="" style="min-width: 220px; padding-top: 15px">
-                            <button id="addinfo" type="button" class="btn btn-success">+ Additional Info</button>
+                            <button id="addinfo" type="button" class="btn btn-success">+ <%= __('clients.addinfo')%></button>
                         </div>
                            
                     </div>
@@ -123,8 +123,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" onclick="deleteAllElements()" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit"  onclick="submitFormAndExpandInfo();" type="button" class="btn btn-primary">Create</button>
+                <button type="button" onclick="deleteAllElements()" class="btn btn-secondary" data-dismiss="modal"><%= __('clients.modal.close')%></button>
+                <button type="submit"  onclick="submitFormAndExpandInfo();" type="button" class="btn btn-primary"><%= __('clients.modal.create')%></button>
             </div>
         </div>
     </div>
@@ -135,7 +135,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Edit client</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle"><%= __('clients.modal.edit')%></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -148,15 +148,15 @@
                         <input type="text" id="edit-id" name="id" class="form-control" readonly>
                     </div>
                     <div class="filed">
-                        <label for="username" class="form-label">Name:</label>
+                        <label for="username" class="form-label"><%= __('clients.name')%>:</label>
                         <input type="text" id="edit-name" name="name" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="password" class="form-label">Discount [%]:</label>
+                        <label for="password" class="form-label"><%= __('clients.discount')%> [%]:</label>
                         <input type="text" id="edit-discount" name="discount" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="role" class="form-label">Type:</label>
+                        <label for="role" class="form-label"><%= __('clients.type')%>:</label>
                         <select id="edit-type" name="type" class="form-control" required>
                             <% types.forEach(function(type) { %>
                                 <option value="<%= type %>">
@@ -166,15 +166,15 @@
                         </select>
                     </div>
                     <div class="filed">
-                        <label for="role" class="form-label">PIB:</label>
+                        <label for="role" class="form-label"><%= __('clients.modal.pib')%>:</label>
                         <input type="text" id="edit-pib" name="pib" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="role" class="form-label">Address:</label>
+                        <label for="role" class="form-label"><%= __('clients.modal.address')%>:</label>
                         <input type="text" id="edit-address" name="address" class="form-control" required>
                     </div>
                     <div class="filed">
-                        <label for="role" class="form-label">Category:</label>
+                        <label for="role" class="form-label"><%= __('clients.modal.category')%>:</label>
                         <select id="edit-category-tab" name="category" class="form-control" required>
                             <% category.forEach(function(category) { %>
                                 <option value="<%= category.name %>">
@@ -185,7 +185,7 @@
                     </div>
                     <div class="row">                    
                         <div class="col-lg-3 col-sm-6" style="min-width: 220px;">
-                        <label for="endDate">End</label>
+                        <label for="endDate"><%= __('clients.end')%></label>
                         <input id="edit-endDate" name="end" class="form-control" type="date" />
                         <!--  <span id="endDateSelected"></span>-->
                     </div>
@@ -196,9 +196,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= __('clients.modal.close')%></button>
                 <button type="submit" onclick="document.getElementById('edit-userform').submit();" type="button"
-                    class="btn btn-primary">Confirm</button>
+                    class="btn btn-primary"><%= __('clients.modal.edit')%></button>
             </div>
         </div>
     </div>
@@ -208,7 +208,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Additional info</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle"><%= __('clients.addinfo')%></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -218,16 +218,16 @@
                 <div class="field">
                     <div id="edit-infocont" style="padding-top: 10px;" class="filed"></div>
                     <div class="" style="min-width: 220px; padding-top: 15px; padding-bottom: 15px;">
-                        <button id="edit-addinfo" type="button" class="btn btn-success">+ Additional Info</button>
+                        <button id="edit-addinfo" type="button" class="btn btn-success">+ <%= __('clients.addinfo')%></button>
                     </div>
                 
                 </div>
              
             </div>
             <div class="modal-footer">
-                <button type="button" onclick="" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="" class="btn btn-secondary" data-dismiss="modal"><%= __('clients.modal.close')%></button>
                 <button type="submit" onclick="saveEditInfo()" type="button"
-                    class="btn btn-primary">Save</button>
+                    class="btn btn-primary"><%= __('clients.modal.save')%></button>
             </div>
         </div>
     </div>
@@ -378,19 +378,19 @@
             
           columns: [
               { id: 'id', name: 'ID' },
-              { id: 'name', name: 'Name' },
-              { id: 'discount', name: 'Discount' },
-              { id: 'type', name: 'Type' },
+              { id: 'name', name: "<%= __('clients.name')%>" },
+              { id: 'discount', name: "<%= __('clients.discount')%>" },
+              { id: 'type', name: "<%= __('clients.type')%>" },
               { id: 'pib', name: 'PIB', hidden: true },
               { id: 'address', name: 'Address', hidden: true },
               { id: 'info', name: 'Info', hidden: true },
               { id: 'dcat', name: 'CategoryID', hidden: true },
               { id: 'start', name: 'Start', hidden: true },
-              { id: 'end', name: 'End', formatter: (cell) => cell ? new Date(cell).toISOString().split('T')[0] : '' },
-              { id: 'category_name', name: 'Category' },
+              { id: 'end', name: "<%= __('clients.end')%>", formatter: (cell) => cell ? new Date(cell).toISOString().split('T')[0] : '' },
+              { id: 'category_name', name: "<%= __('clients.catg')%>" },
               {
                   id: 'actions',
-                  name: 'Actions',
+                  name: "<%= __('clients.action')%>",
                   formatter: (_, row) => {
                     <% if (role === 'root') { %>
             
@@ -398,31 +398,31 @@
                         class: 'btn btn-danger'  ,
                         style: 'margin-right: 10px;',
                         onClick: () => deleteItem(row.cells[0].data)
-                      }, 'Delete');
+                      }, "<%= __('clients.actions.delete')%>");
                       const buttonEdit = gridjs.h('button', {
                           class: 'btn btn-success',
                           style: 'margin-right: 10px;',
                           'data-toggle': "modal" , 
                           'data-target': "#editModal",
                           onClick: () => editItem(row.cells)
-                      }, 'Edit');
+                      }, "<%= __('clients.actions.edit')%>");
                       <% } %>
                       const buttonReport = gridjs.h('button', {
                           class: 'btn btn-info',
                           style: 'margin-right: 10px;',
                           onClick: () => window.location.href = `singleclient/${row.cells[0].data}`
-                      }, 'Receipts');
+                      }, "<%= __('clients.actions.receipts')%>");
                       const buttonStats = gridjs.h('button', {
                           class: 'btn btn-warning',
                           style: 'margin-right: 10px;',
                           onClick: () => window.location.href = `single-stats/${row.cells[0].data}`
-                      }, 'Statistics');
+                      }, "<%= __('clients.actions.stats')%>");
                       const buttonInfo = gridjs.h('button', {
                           class: 'btn btn-secondary',
                           'data-toggle': "modal",
                           'data-target': "#infoModal",
                           onClick: () => editInfo(row.cells)
-                      }, 'Info');
+                      }, "<%= __('clients.actions.info')%>");
                       return gridjs.h('td', {},
                       <% if (role === 'root') { %>
                       button, buttonEdit, 

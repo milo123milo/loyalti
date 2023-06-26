@@ -57,40 +57,40 @@
 
 <div id="head" class="header">
     <div class="h1">
-       General Statistics
+    <%= __('statisitc.general')%>
     </div>
     <div class="head-left">
 
         <button onclick="window.history.back()" style="margin-bottom: 4px;" id="logout-button" type="button"
             class="bt btn btn-primary">
-            < Back</button>
+        <%= __('statisitc.back')%></button>
     </div>
 </div>
 
 <div class="content">
     <div class="row">
         <div class="col-lg-3 col-sm-6" style="min-width: 220px;">
-            <label for="startDate">Start</label>
+            <label for="startDate"><%= __('statisitc.start')%></label>
             <input id="startDate" class="form-control" type="date" />
             <!-- <span id="startDateSelected"></span> -->
         </div>
         <div class="col-lg-3 col-sm-6" style="min-width: 220px;">
-            <label for="endDate">End</label>
+            <label for="endDate"><%= __('statisitc.end')%></label>
             <input id="endDate" class="form-control" type="date" />
             <!--  <span id="endDateSelected"></span>-->
         </div>
         <div class="btncont">
-            <button onclick="getItemsData()" id="update" class="btn btn-primary formbtn">Update ⟲</button>
+            <button onclick="getItemsData()" id="update" class="btn btn-primary formbtn"><%= __('statisitc.update')%></button>
         </div>
 
     </div>
     <div class="info">
         
-        <div style="margin-right: 20px;">Total sold: <span style="color: #2498e9;"><span id="purcinfo"></span> €
+        <div style="margin-right: 20px;"><%= __('statisitc.total')%>: <span style="color: #2498e9;"><span id="purcinfo"></span> €
             </span> </div>
-        <div style="margin-right: 20px;">Total revenue: <span style="color: #2498e9;"><span id="paidinfo"></span> €</span>
+        <div style="margin-right: 20px;"><%= __('statisitc.revenue')%>: <span style="color: #2498e9;"><span id="paidinfo"></span> €</span>
         </div>
-        <div style="margin-right: 20px;">Client benefits: <span style="color: #2498e9;"><span id="savedinfo"></span> €</span>
+        <div style="margin-right: 20px;"><%= __('statisitc.benefits')%>: <span style="color: #2498e9;"><span id="savedinfo"></span> €</span>
         </div>
     </div>
 </div>
@@ -213,11 +213,11 @@
     const myGrid = new gridjs.Grid({
 
         columns: [
-            { id: 'name', name: 'Name' },
-            { id: 'totalQuantity', name: 'Quantity' },
-            { id: 'pricePerPiece', name: 'PricePerPiece' },
-            { id: 'totalPriceVAT', name: 'TotalPriceVAT' },
-            { id: 'totalDisc', name: 'TotalPriceDiscount' },
+            { id: 'name', name: "<%= __('statisitc.name')%>" },
+            { id: 'totalQuantity', name: "<%= __('statisitc.quanity')%>" },
+            { id: 'pricePerPiece', name: "<%= __('statisitc.ppp')%>" },
+            { id: 'totalPriceVAT', name: "<%= __('statisitc.tpv')%>" },
+            { id: 'totalDisc', name: "<%= __('statisitc.tpd')%>" },
 
         ],
         pagination: {
@@ -246,7 +246,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Profit €',
+                label: "<%= __('statisitc.profit')%> €",
                 data: [],
                 borderWidth: 1,
                 tension: 0.3
@@ -257,7 +257,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: 'Discounted Revenue',
+                    text: "<%= __('statisitc.discrevenue')%>",
                     position: 'bottom'
                 }
             },
@@ -274,7 +274,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Price €',
+                label: "<%= __('statisitc.price')%> €",
                 data: [],
                 borderWidth: 1,
 
@@ -290,7 +290,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: 'Most Revenue on Item',
+                    text: "<%= __('statisitc.mostrevenue')%>",
                     position: 'bottom'
                 }
             },
@@ -302,7 +302,7 @@
         data: {
             labels: [],
             datasets: [{
-                label: 'Quantity',
+                label: "<%= __('statisitc.quanity')%>",
                 data: [],
                 borderWidth: 1,
 
@@ -318,7 +318,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: "Top-selling products by Quantity",
+                    text: "<%= __('statisitc.topselling')%>",
                     position: 'bottom'
                 }
             }

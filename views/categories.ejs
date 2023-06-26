@@ -20,15 +20,15 @@
 
 <div class="header">
     <div class="h1">
-        Discount Categories
+        <%= __('category.category')%>
     </div>
     <div class="head-left">
         <button style="margin-bottom: 4px;" id="create-button" type="button" class="bt btn btn-success" data-toggle="modal"
-            data-target="#createCatgModal">+ Create new</button>
+            data-target="#createCatgModal"><%= __('category.create')%></button>
 
                 <button onclick="window.location='/'" style="margin-bottom: 4px;" id="logout-button" type="button"
                     class="bt btn btn-primary">
-                    < Back</button>
+                    <%= __('category.back')%></button>
     </div>
 </div>
 
@@ -53,7 +53,7 @@
                 <div>
                     <h5 class="modal-title" id="exampleModalLongTitle" contenteditable="true" oninput="limitCharacters(this, 10)">Category
                     </h5>
-                    <div onclick="doubleCheck() " style="cursor: pointer;color: #dc3545; margin-left: 1px; margin-top: 25px; font-size: 0.8rem;">Delete Category
+                    <div onclick="doubleCheck() " style="cursor: pointer;color: #dc3545; margin-left: 1px; margin-top: 25px; font-size: 0.8rem;"><%= __('category.modal.delete')%>
                     </div>
                 </div>
                 
@@ -70,40 +70,40 @@
                 <form id="edit-userform" class="formm" onsubmit="return false;">
                     <div class="filed" style="display: flex;">
                         <div style="margin-right: 15px;">
-                            <label for="id" class="form-label">Duration:</label>
+                            <label for="id" class="form-label"><%= __('category.modal.duration')%>:</label>
                             <input type="text" id="duration-field" name="id" class="form-control" >
                         </div>
                         <div style="margin-right: 15px;">
-                            <label for="id" class="form-label">Start %:</label>
+                            <label for="id" class="form-label"><%= __('category.modal.start')%> %:</label>
                             <input type="text" id="start-field" name="id" class="form-control" >
                         </div>
                         <div>
-                            <label for="id" class="form-label">Max %:</label>
+                            <label for="id" class="form-label"><%= __('category.modal.max')%> %:</label>
                             <input type="text" id="max-field" name="id" class="form-control">
                         </div>
                     </div> 
                     <div id="rangeCont" style="display: flex; justify-content: space-between;">
                         <div id="ranges">
-                            <label for="id" class="form-label">Spendings €:</label>
+                            <label for="id" class="form-label"><%= __('category.modal.spendings')%> €:</label>
                         </div>
                         <div id="discounts">
-                            <label for="id" class="form-label">Discount %:</label>
+                            <label for="id" class="form-label"><%= __('category.modal.discount')%> %:</label>
                         </div>
                     </div>
-                    <button id="add-range" style="margin-top: 10px;" type="button" class="btn btn-success">+ Add</button>
+                    <button id="add-range" style="margin-top: 10px;" type="button" class="btn btn-success"><%= __('category.modal.add')%></button>
                     
                 
                 </form>
             </div>
             <div class="modal-footer" style="justify-content: space-between !important;">
                 
-                <button id="edit-addinfo" type="button" onclick="viewClients()" class="btn btn-info">View Clients</button>
+                <button id="edit-addinfo" type="button" onclick="viewClients()" class="btn btn-info"><%= __('category.modal.view')%></button>
                 
                 
                 <div>
                    
-                <button type="button" onclick="" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" onclick="getInputs()" type="button" class="btn btn-primary">Save</button>
+                <button type="button" onclick="" class="btn btn-secondary" data-dismiss="modal"><%= __('category.modal.close')%></button>
+                <button type="submit" onclick="getInputs()" type="button" class="btn btn-primary"><%= __('category.modal.save')%></button>
                 </div>
             </div>
         </div>

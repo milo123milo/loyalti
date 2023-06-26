@@ -32,7 +32,7 @@
     </div>
     <div class="head-left">
         
-        <button onclick="window.history.back()" style="margin-bottom: 4px;" id="logout-button" type="button" class="bt btn btn-primary">< Back</button>
+        <button onclick="window.history.back()" style="margin-bottom: 4px;" id="logout-button" type="button" class="bt btn btn-primary"><%= __('single.back')%></button>
     </div>
 </div>
 
@@ -45,7 +45,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Items</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle"><%= __('single.modal.items')%></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -56,7 +56,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= __('single.modal.close')%></button>
             </div>
         </div>
     </div>
@@ -88,14 +88,14 @@
   const itemsGrid = new gridjs.Grid({
 
         columns: [
-            { id: 'Name', name: 'Name' },
-            { id: 'Quantity', name: 'Quantity' },
-            { id: 'Unit', name: 'Unit'},
-            { id: 'PricePerPiece', name: 'Per Piece €' },
-            { id: 'PriceTotal', name: 'Total €' },
-            { id: 'PriceTotalVAT', name: 'TotalVAT €' },
-            { id: 'Discount', name: 'Discount %' },
-            { id: 'Total', name: 'Total €' },
+            { id: 'Name', name: "<%= __('single.modal.name')%>" },
+            { id: 'Quantity', name: "<%= __('single.modal.quantity')%>" },
+            { id: 'Unit', name: "<%= __('single.modal.unit')%>" },
+            { id: 'PricePerPiece', name: "<%= __('single.modal.ppp')%> €"  },
+            { id: 'PriceTotal', name: "<%= __('single.total')%> €" },
+            { id: 'PriceTotalVAT', name: "<%= __('single.totalvat')%> €" },
+            { id: 'Discount', name: "<%= __('single.discount')%> %" },
+            { id: 'Total', name: "<%= __('single.totaldisc')%> €" },
             
         ],
         data: datAr,
@@ -109,14 +109,14 @@
           columns: [
               { id: 'id', name: 'ID' },
               { id: 'iic', name: 'IIC' },
-              { id: 'date', name: 'Date', formatter: (cell) => new Date(cell).toLocaleDateString() + ' ' + new Date(cell).toLocaleString(undefined, options) },
-              { id: 'total', name: 'Total €'},
-              { id: 'totalVAT', name: 'TotalVAT €' },
-              { id: 'discount', name: 'Discount %' },
-              { id: 'totalDiscounted', name: 'Total Discounted €' },
+              { id: 'date', name: "<%= __('single.date')%>", formatter: (cell) => new Date(cell).toLocaleDateString() + ' ' + new Date(cell).toLocaleString(undefined, options) },
+              { id: 'total', name: "<%= __('single.total')%> €"},
+              { id: 'totalVAT', name: "<%= __('single.totalvat')%> €" },
+              { id: 'discount', name: "<%= __('single.discount')%> %" },
+              { id: 'totalDiscounted', name: "<%= __('single.totaldisc')%> €" },
               {
                   id: 'actions',
-                  name: 'Actions',
+                  name: "<%= __('single.actions')%>",
                   formatter: (_, row) => {
                       
                       const buttonEdit = gridjs.h('button', {
@@ -129,7 +129,7 @@
                             this.removeEventListener('click', arguments.callee);
                             
                         }
-                      }, 'Show Items');
+                      }, "<%= __('single.show')%>");
                       
                       return gridjs.h('td', {},  buttonEdit);
                   },

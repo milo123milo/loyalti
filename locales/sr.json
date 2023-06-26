@@ -1,0 +1,160 @@
+{
+	"lang": "Jezik: ",
+	"menu": {
+		"menu": "Početna",
+		"logout": "Odjavi se",
+		"input": "Unos",
+		"categories": "Kategorije",
+		"general": "Statistika",
+		"clients": "Klijenti",
+		"users": "Korisnici"
+	},
+	"input": {
+		"input": "Unos",
+		"back": "< Nazad",
+		"submit": "Potvrdi",
+		"receipt": "Račun",
+		"card": "Loyalty kartica",
+		"additional": "Dodatni artikli:",
+		"add": "+ Dodaj artikle",
+		"items": {
+			"name": "Ime",
+			"unit": "Jedinica",
+			"quanity": "Količina",
+			"unitprice": "CijenaBezPDV"
+		}
+	},
+	"category": {
+		"category": "Kategorije popusta",
+		"create": "+ Kreiraj novu",
+		"back": "< Nazad",
+		"component": {
+			"spendings": "Potrošnja",
+			"duration": "Trajanje",
+			"start": "Početni popusta",
+			"max": "Maksimalni popust",
+			"month": "Mjesec(i)",
+			"discountpercent": "Popust u procentima"
+		},
+		"modal": {
+			"delete": "Izbriši kategoriju",
+			"spendings": "Potrošnja",
+			"discount": "Popust",
+			"add": "+ Dodaj",
+			"view": "Pogledaj klijente",
+			"close": "Zatvori",
+			"save": "Sačuvaj",
+			"start": "Početni",
+			"max": "Maksimalni",
+			"duration": "Trajanje"
+		}
+	},
+	"statisitc": {
+		"general": "Generalna statistika",
+		"back": "< Nazad",
+		"update": "Ažuriraj ⟲",
+		"start": "Početni datum",
+		"end": "Krajni datum",
+		"total": "Ukupno prodato",
+		"revenue": "Ukupni prihod",
+		"benefits": "Ušteda klijenta",
+		"profit": "Profit",
+		"discrevenue": "Prihod s popustom",
+		"mostrevenue": "Najviše prihoda na proizvodu",
+		"topselling": "Najprodavaniji proizvodi po količini",
+		"name": "Ime",
+		"quanity": "Količina",
+		"ppp": "CijenaPoKomadu",
+		"tpv": "UkupnaCijenaSaPDV-om",
+		"tpd": "UkupnaCijenaSaPopustom",
+		"price": "Cijena"
+	},
+	"clients": {
+		"clients": "Klijenti",
+		"create": "+ Kreiraj novog",
+		"back": "< Nazad",
+		"name": "Ime",
+		"disc": "Popust",
+		"type": "Tip",
+		"start": "Datum početka",
+		"end": "Datum završetka",
+		"catg": "Kategorija",
+		"addinfo": "Dodatne informacije",
+		"action": "Akcije",
+		"actions": {
+			"delete": "Izbriši",
+			"edit": "Izmijeni",
+			"receipts": "Računi",
+			"stats": "Statistika",
+			"info": "Informacije"
+		},
+		"modal": {
+			"create": "Kreiraj klijenta",
+			"pib": "PIB",
+			"address": "Adresa",
+			"category": "Kategorije popusta",
+			"close": "Zatvori",
+			"edit": "Izmijeni klijenta",
+			"save": "Sačuvaj"
+		},
+		"discount": "Popust"
+	},
+	"single": {
+		"back": "< Nazad",
+		"date": "Datum i vrijeme",
+		"total": "Ukupno",
+		"totalvat": "UkupnoSaPDV-om",
+		"discount": "Popust",
+		"totaldisc": "UkupnoSaPopustom",
+		"show": "Prikaži artikle",
+		"actions": "Akcije",
+		"modal": {
+			"name": "Naziv",
+			"quantity": "Količina",
+			"unit": "Jedinica",
+			"ppp": "CijenaPoKomadu",
+			"items": "Stavke",
+			"close": "Zatvori"
+		}
+	},
+	"singlestats": {
+		"back": "< Nazad",
+		"start": "Početni datum",
+		"end": "Krajni datum",
+		"update": "Ažuriraj ⟲",
+		"discount": "Popust",
+		"totalpu": "Ukupno kupljeno",
+		"totalpaid": "Ukupno plaćeno",
+		"saved": "Ušteđeno",
+		"dcs": "Klijentovi potrošeni iznosi s popustom",
+		"spendings": "Potrošnja",
+		"hsci": "Proizvodi najveće potrošnje kod klijenata",
+		"price": "Cijena",
+		"ctiq": "Najprodavaniji proizvodi kod klijenta po količini",
+		"quantity": "Količina",
+		"table": {
+			"name": "Ime",
+			"quantity": "Količina",
+			"ppp": "CenaPoKomadu",
+			"totalvat": "UkupnoSaPDV-om",
+			"discount": "Popust",
+			"totaldisc": "UkupnoSaPopustom"
+		}
+	},
+	"users": {
+		"users": "Korisnici",
+		"create": "+ Kreiraj novog",
+		"back": "< Nazad",
+		"username": "Korisničko ime",
+		"password": "Lozinka",
+		"role": "Uloga",
+		"action": "Akcije",
+		"close": "Zatvori",
+		"createu": "Kreiraj korisnika",
+		"edit": "Izmijeni korisnika",
+		"actions": {
+			"delete": "Izbriši",
+			"edit": "Izmijeni"
+		}
+	}
+}

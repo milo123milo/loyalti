@@ -1,0 +1,162 @@
+{
+	"lang": "Language: ",
+	"menu": {
+		"menu": "Menu",
+		"logout": "Log Out",
+		"input": "Input",
+		"categories": "Categories",
+		"general": "General Stats",
+		"clients": "Clients",
+		"users": "Users"
+	},
+  "input": {
+    "input": "Input",
+    "back": "< Back",
+    "submit": "Submit",
+    "receipt": "Receipt",
+    "card": "Loyalty Card",
+    "additional": "Additional items:",
+    "add": "+ Add Items",
+    "items": {
+      "name": "Name",
+      "unit": "Unit",
+      "quanity": "Quanity",
+      "unitprice": "UnitePriceBeforeVat"
+    }
+  },
+  "category": {
+    "category": "Discount Categories",
+    "create": "+ Create new",
+    "back": "< Back",
+    "component": {
+      "spendings": "Spendings",
+      "duration": "Duration",
+      "start": "Start Discount",
+      "max": "Max Discount",
+      "month": "Month",
+      "discountpercent": "Discount Percentage"
+    },
+    "modal": {
+      "delete": "Delete category",
+      "spendings": "Spendings",
+      "discount": "Discount",
+      "add": "+ Add",
+      "view": "View Clients",
+      "close": "Close",
+      "save": "Save",
+      "start": "Start",
+      "max": "Max",
+       "duration": "Duration"
+
+    }
+  },
+  "statisitc": {
+    "general": "General Statistics",
+    "back": "< Back",
+    "update": "Update ⟲",
+    "start": "Start Date",
+    "end": "End Date",
+    "total": "Total sold",
+    "revenue": "Total revenue",
+    "benefits": "Client benefits",
+    "profit": "Profit",
+    "discrevenue": "Discounted revenue",
+    "mostrevenue": "Most revenue on item",
+    "topselling": "Top-selling products by Quanity",
+    "name": "Name",
+    "quanity": "Quanity",
+    "ppp": "PricePerPiece",
+    "tpv": "TotalPriceVAT",
+    "tpd": "TotalPriceDiscount",
+    "price": "Price"
+  },
+  "clients": {
+    "clients": "Clients",
+    "create":"+ Create new",
+    "back":"< Back",
+    "name":"Name",
+    "disc": "Discount",
+    "type": "Type",
+    "start":"Datum početka",
+    "end": "End Date",
+    "catg": "Category",
+    "addinfo": "Additional Info",
+    "action": "Actions",
+    "actions": {
+      "delete": "Delete",
+      "edit": "Edit",
+      "receipts": "Receipts",
+      "stats": "Statistics",
+      "info": "Info"
+    },
+    "modal": {
+      "create": "Create new client",
+      "pib": "PIB",
+      "address": "Address",
+      "category": "Discount Categories",
+      "close": "Close",
+      "edit": "Edit client",
+      "save": "Save"
+    },
+    "discount": "Discount"
+
+  },
+  "single": {
+    "back":"< Back",
+    "date": "Date and Time",
+    "total": "Total",
+    "totalvat": "TotalVAT",
+    "discount": "Discount",
+    "totaldisc": "Total Discounted",
+    "show": "Show items",
+    "actions": "Actions",
+    "modal": {
+      "name": "Name",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "ppp": "PricePerPiece",
+      "items": "Items",
+      "close": "Close"
+    },
+    "singlestats": {
+      "back":"< Back",
+      "start":"Start Date",
+      "end":"End Date",
+      "update":"Update ⟲",
+      "discount": "Discount",
+      "totalpu": "Total purchased",
+      "totalpaid": "Total paid",
+      "saved": "Saved",
+      "dcs": "Discounted Client's spendings",
+      "spendings": "Spendings",
+      "hsci": "Highest-Spending Clients Items",
+      "price": "Price",
+      "ctiq": "Client's Top Items By Quantity",
+      "quanitity": "Quantity",
+      "table": {
+        "name":"Name",
+        "quantity": "Quantity",
+        "ppp": "PricePerPiece",
+        "totalvat": "TotalVAT",
+        "discount": "Discount",
+        "totaldisc":"Total Discounted"
+      }
+    }
+  },
+  "users":{
+    "users": "Users",
+    "create":"+ Create new",
+    "back":"< Back",
+    "username": "Username",
+    "password": "Password",
+    "role": "Role",
+    "action": "Actions",
+    "close": "Close",
+    "createu": "Create user",
+    "edit": "Edit user",
+    "actions": {
+      "delete": "Delete",
+      "edit": "Edit"
+    }
+  }
+}

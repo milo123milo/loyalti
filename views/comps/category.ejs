@@ -13,9 +13,9 @@
         <%= category.name %>
     </div>
     <div>
-        <div>Duration: <%= category.duration %> Month</div>
-        <div>Start Discount: <%= category.startdisc %> %</div>
-        <div>Max Discount: <%= category.maxdisc %> %</div>
+        <div><%= __('category.component.duration')%>: <%= category.duration %> <%= __('category.component.month')%></div>
+        <div><%= __('category.component.start')%>: <%= category.startdisc %> %</div>
+        <div><%= __('category.component.max')%>: <%= category.maxdisc %> %</div>
     </div>
 </div>
 </div>
@@ -142,7 +142,7 @@
             labels: discounts,
             datasets: [
                 {
-                    label: 'Spendings €',
+                    label: "<%= __('category.component.spendings')%> €",
                     data: spending,
                     borderWidth: 1
                 }
@@ -154,7 +154,7 @@
                 
                 title: {
                     display: true,
-                    text: 'Discount Percentage %',
+                    text: "<%= __('category.component.discountpercent')%> %",
                     position: 'bottom'
                 }
             },

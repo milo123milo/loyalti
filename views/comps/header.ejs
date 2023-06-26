@@ -2,9 +2,56 @@
 
 <div class="header">
     <div class="h1"><%= title %></div>
+
+    
+    
+    
+
     <div class="head-left">
         <div class="h5 name">
             <%= name %>
         </div>
-        <button id="logout-button" type="button" class="btn btn-danger">Log Out</button>
+        <button id="logout-button" type="button" class="btn btn-danger"><%= __('menu.logout') %></button>
     </div>
+</div>
+<div>
+<div class="langcont">
+    <div>
+        <%= __('lang') %>
+    </div>
+    <div class="flags">
+        <div class="flagbtn" onclick="window.location.href = '/change-language-sr';"><span class="fi fi-me"></span></div>
+        <div class="flagbtn" onclick="window.location.href = '/change-language-en';"><span class="fi fi-gb"></div>
+    </div>
+    
+</div>
+</div>
+<style>
+    .langcont {
+            margin-inline: 100px;
+            
+            display: flex;
+            flex-direction: row;
+            
+            align-items: center;
+    }
+    .flagbtn {
+        cursor: pointer;
+    }
+    .flagbtn:hover {
+        opacity: 0.7;
+    }
+    .header {
+        margin-block: 10px !important;
+    }
+    .flags {
+        margin-left: 5px;
+        padding-bottom: 2px;
+        display: flex;
+        width: 50px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+    }
+</style>
