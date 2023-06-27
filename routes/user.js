@@ -101,7 +101,7 @@ router.post('/checkBill', auth.done, (req, res) => {
                 if(it.id === null){
                   it.id = generateUniqueID2()
                 }
-                it.dateTimeCreated = convertDateForma(it.dateTimeCreated)
+                it.dateTimeCreated = convertDateFormat(it.dateTimeCreated)
                 //************
                 pool.createClientReceipts(it.id, it.iic, it.dateTimeCreated, it.sameTaxes[0].priceBeforeVat, it.totalPrice, disc, client[0].id, (err) => {
                   if (err) {
