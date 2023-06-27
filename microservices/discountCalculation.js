@@ -155,6 +155,12 @@ function updateClientsDatabase(clientsArray) {
 
 function updateClientsArray() {
   var updatedClients = [];
+  const today = new Date();
+  const div = '-----------------------'
+  const formattedDateTime = today.toISOString();
+        
+
+        
 
   clients.forEach((client) => {   
     const category = catgs.find((catg) => catg.name === client.category_name);                   
@@ -166,7 +172,10 @@ function updateClientsArray() {
 
       if (updatedClients.length === clients.length) {
         //console.log(updatedClients);
+        
         updateClientsDatabase(updatedClients)
+        const logs = `${formattedDateTime}\n${updatedClients}\n${div}\n`;
+        fs.appendFile('./logs/discountCalculation.txt', logs, (err) => {console.log("ErrLogs2: ", err)}) 
       }
     });
   });

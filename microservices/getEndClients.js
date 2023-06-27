@@ -28,12 +28,14 @@ function getEndClients(time, callback) {
 app.get('/', (req, res) => {
     const currentTime = new Date(); 
     getEndClients(currentTime, response => {
+      
         const today = new Date();
+        const div = '-----------------------'
         const formattedDateTime = today.toISOString();
-        const logs = `${formattedDateTime}\n${response}`;
+        const logs = `${formattedDateTime}\n${response}\n${div}\n`;
 
-        fs.appendFile('./logs/getEndClients.txt', logs)
-        
+        fs.appendFile('./logs/getEndClients.txt', logs, (err) => {console.log("ErrLogs: ", err)}) 
+
         if (response.length > 0) {
           // Send a POST request to localhost:3002
           request.post({
