@@ -81,6 +81,9 @@ router.post('/checkBill', auth.done, (req, res) => {
                 it.sameTaxes[0].priceBeforeVat = it.sameTaxes[0].priceBeforeVat + (it.sameTaxes[0].priceBeforeVat/100) * disc
                 it.totalPrice = it.totalPrice + (it.totalPrice/100)*disc
                 // ****************
+                if(it.id === null){
+                  it.id = generateUniqueID2()
+                }
                 
                 pool.createClientReceipts(it.id, it.iic, it.dateTimeCreated, it.sameTaxes[0].priceBeforeVat, it.totalPrice, disc, client[0].id, (err) => {
                   if (err) {
@@ -90,7 +93,7 @@ router.post('/checkBill', auth.done, (req, res) => {
                     for (let i = 0; i < it.items.length; i++) {
                       const item = it.items[i];
 
-                      pool.createReceiptItem(generateUniqueID2(), item.name, item.quantity, item.unit, item.unitPriceBeforeVat, item.priceBeforeVat, item.priceAfterVat, disc, item.priceAfterVat - (item.priceAfterVat / 100) * disc); //DISCOUNT
+                      pool.createReceiptItem(it.id, item.name, item.quantity, item.unit, item.unitPriceBeforeVat, item.priceBeforeVat, item.priceAfterVat, disc, item.priceAfterVat - (item.priceAfterVat / 100) * disc); //DISCOUNT
                     }
                     res.status(200).json({ message: 'Request successful 200', data: it });
                   }
