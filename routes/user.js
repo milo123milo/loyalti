@@ -33,6 +33,23 @@ function generateUniqueID2() {
   return uniqueID;
   
 }
+function convertDateFormat(dateString) {
+  const date = new Date(dateString);
+  
+  // Extract the individual date components
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
+  const hours = ('0' + date.getHours()).slice(-2);
+  const minutes = ('0' + date.getMinutes()).slice(-2);
+  const seconds = ('0' + date.getSeconds()).slice(-2);
+  
+  // Create the desired format
+  const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  
+  return formattedDate;
+}
+
 
 router.use((req, res, next) => {
   if (req.user === false) {
@@ -84,7 +101,8 @@ router.post('/checkBill', auth.done, (req, res) => {
                 if(it.id === null){
                   it.id = generateUniqueID2()
                 }
-                
+                it.dateTimeCreated = convertDateForma(it.dateTimeCreated)
+                //************
                 pool.createClientReceipts(it.id, it.iic, it.dateTimeCreated, it.sameTaxes[0].priceBeforeVat, it.totalPrice, disc, client[0].id, (err) => {
                   if (err) {
                     res.status(500).json({ message: 'Error Database', error: err });
