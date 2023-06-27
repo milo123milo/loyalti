@@ -2,6 +2,8 @@ var connection = require('../database/db_connection')
 connection = connection.pool
 const express = require('express');
 const request = require('request');
+const fs = require('fs');
+
 
 const app = express();
 const port = 3001;
@@ -26,6 +28,12 @@ function getEndClients(time, callback) {
 app.get('/', (req, res) => {
     const currentTime = new Date(); 
     getEndClients(currentTime, response => {
+        const today = new Date();
+        const formattedDateTime = today.toISOString();
+        const logs = `${formattedDateTime}\n${response}`;
+
+        fs.appendFile('./logs/getEndClients.txt', logs)
+        
         if (response.length > 0) {
           // Send a POST request to localhost:3002
           request.post({
