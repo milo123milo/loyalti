@@ -1,5 +1,6 @@
 # loyalti
 
+**Add backend data validators for routes
 
 Root user is created on init, it cant be created od edited from UI or API. username: root, password: root
 
