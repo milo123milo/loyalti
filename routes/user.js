@@ -19,6 +19,20 @@ function generateUniqueID() {
   return uniqueID;
   
 }
+function generateUniqueID2() {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear().toString().slice(-2);
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+  const day = currentDate.getDate().toString().padStart(2, '0');
+  const hours = currentDate.getHours().toString().padStart(2, '0');
+  
+  const randomNum = Math.floor(Math.random() * 90) + 10;
+  const uniqueID = randomNum  + year + month + day ;
+
+  console.log(uniqueID);
+  return uniqueID;
+  
+}
 
 router.use((req, res, next) => {
   if (req.user === false) {
@@ -76,7 +90,7 @@ router.post('/checkBill', auth.done, (req, res) => {
                     for (let i = 0; i < it.items.length; i++) {
                       const item = it.items[i];
 
-                      pool.createReceiptItem(it.id, item.name, item.quantity, item.unit, item.unitPriceBeforeVat, item.priceBeforeVat, item.priceAfterVat, disc, item.priceAfterVat - (item.priceAfterVat / 100) * disc); //DISCOUNT
+                      pool.createReceiptItem(generateUniqueID2(), item.name, item.quantity, item.unit, item.unitPriceBeforeVat, item.priceBeforeVat, item.priceAfterVat, disc, item.priceAfterVat - (item.priceAfterVat / 100) * disc); //DISCOUNT
                     }
                     res.status(200).json({ message: 'Request successful 200', data: it });
                   }
