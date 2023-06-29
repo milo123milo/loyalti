@@ -92,12 +92,14 @@ router.post('/checkBill', auth.done, (req, res) => {
               if (err) {
                 res.status(501).json({ message: 'Error Client', error: err });
               } else {
+                if(it.typeOfInvoice !== "NONCASH"){
                 //Receipt is inputed with precalcultaed discount so we need to add discount to total pice
                 const disc = parseInt(client[0].discount)
                 console.log(disc)
                 it.sameTaxes[0].priceBeforeVat = it.sameTaxes[0].priceBeforeVat + (it.sameTaxes[0].priceBeforeVat/100) * disc
                 it.totalPrice = it.totalPrice + (it.totalPrice/100)*disc
                 // ****************
+                }
                 if(it.id === null){
                   it.id = generateUniqueID2()
                 }
