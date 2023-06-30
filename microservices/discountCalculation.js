@@ -153,7 +153,8 @@ function updateClientsDatabase(clientsArray) {
   });
 }
 
-function updateClientsArray() {
+function updateClientsArray(clients) {
+  var clients = clients
   var updatedClients = [];
   const today = new Date();
   const div = '-----------------------'
@@ -199,7 +200,7 @@ app.post('/', (req, res) => {
 
   getAllCategory((categories) => {
   catgs = categories;
-  updateClientsArray();
+  updateClientsArray(clients);
     });  
     
   
