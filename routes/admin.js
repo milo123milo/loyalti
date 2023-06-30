@@ -5,6 +5,27 @@ var role = require('./rules/roleCheck')
 var pool = require('../database/queries')
 var types = require('../database/role_types')
 var workers = require('./workers/helperFunctions')
+const fs = require('fs');
+const path = require('path');
+
+function readTxtFilesFromFolder(folderPath) {
+  const files = fs.readdirSync(folderPath);
+
+  const txtFiles = files.filter(file => path.extname(file).toLowerCase() === '.txt');
+
+  const fileObjects = txtFiles.map(file => {
+    const fileTitle = path.parse(file).name;
+    const filePath = path.join(folderPath, file);
+    const content = fs.readFileSync(filePath, 'utf8').replace(/\r\n|\r|\n/g, '\n');
+
+    return {
+      fileTitle,
+      content
+    };
+  });
+
+  return fileObjects;
+}
 //Add routes below
 
 function getClient(id) {
@@ -356,5 +377,21 @@ router.get('/get-all-stats/:start/:end', /*auth.done, role.admin,*/ function(req
     
  
 });
+
+router.get('/logs', auth.done, role.admin, function(req, res, next) {
+    
+    //  console.log(receipts)
+    console.log(readTxtFilesFromFolder('./microservices/logs'))
+    return res.render('logs', {logsArray: readTxtFilesFromFolder('./microservices/logs')}); 
+    //return res.json(readTxtFilesFromFolder('./microservices/logs'))
+      
+    
+
+    
+ 
+});
+
+
+
 
 module.exports = router;

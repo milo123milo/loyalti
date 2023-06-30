@@ -13,6 +13,9 @@
 
 <div class="menu">
     <div class="admin-items">
+        <% if(role==='root' ){ %>
+            <%- include('comps/card', {admin: true,href: '/logs' , link: '/images/logs.svg' , title: "Logs" }); %>
+                <% } %>
             <% if(role==='root'){ %>
                 <%- include('comps/card', {admin: true,href: '/users' , link: '/images/user.svg' , title:  __('menu.users') }); %>
             <% } %>
@@ -31,6 +34,7 @@
             <% if(role==='user' || role==='root'){ %>
                 <%- include('comps/card', {admin: true, href: '/input' , link: '/images/qr.svg' , title:  __('menu.input') }); %>
             <% } %>
+            
     </div>
     
 </div>

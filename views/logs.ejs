@@ -1,0 +1,91 @@
+<link rel="stylesheet" href="/stylesheets/header.css" />
+<link rel="stylesheet" href="/stylesheets/users.css" />
+<link rel="stylesheet" href="/stylesheets/fonts.css" />
+
+<link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+
+
+<script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js
+" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+<link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<div class="header">
+    <div class="h1">
+        Logs
+    </div>
+    <div class="head-left">
+        <button onclick="window.location='/'" style="margin-bottom: 4px;" id="logout-button" type="button"
+            class="bt btn btn-primary">
+            <%= __('users.back')%>
+        </button>
+    </div>
+</div>
+
+
+<div style="margin-inline: 100px;">
+    <% logsArray.forEach(function(log) { %>
+        <div class="cnt">
+        <div id="logview" class="logbox">
+            <div class="title">
+                <%= log.fileTitle %>
+            </div>
+            <div class="box log-div">
+                <%= log.content %>
+            </div>
+        </div>
+        <% }); %>
+        </div>
+</div>
+
+<style>
+    .logbox{
+       box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+        border-radius: 5px;
+    }
+    .log-div {
+        white-space: pre-line;
+        
+    }
+    .cnt {
+        display: flex;
+        justify-content: space-between;
+        
+    }
+    .box {
+        color: white;
+        background-color: #2D2D2D;
+        padding-inline: 30px;
+        padding-block: 15px;
+        width: 650px;
+        height: 300px;
+        border-radius: 0px 0px 5px 5px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+    .title {
+        padding-top: 19px;
+        padding-inline: 15px;
+        background-color: rgb(236, 236, 238);
+        height: 60px;
+        border-radius: 5px 5px 0px 0px;
+        font-weight: 600;
+    }
+    
+</style>
+
