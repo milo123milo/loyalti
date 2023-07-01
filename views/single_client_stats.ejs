@@ -132,7 +132,7 @@
                         })
                         .then(it => {
                             const data = it.items.sort((a, b) => b.totalDisc - a.totalDisc);
-
+                            
                             myGrid.updateConfig({
                                 data: data
                             }).forceRender();
@@ -168,7 +168,7 @@
 
                             const saved = result.TotalVATSum.toFixed(2) - result.TotalDiscountedSum.toFixed(2);
 
-                            document.getElementById('discinfo').innerText = data[0].discount
+                            document.getElementById('discinfo').innerText = "<%- clientdisc %>"//data[0].discount
                             document.getElementById('purcinfo').innerText = result.TotalVATSum.toFixed(2);
                             document.getElementById('paidinfo').innerText = result.TotalDiscountedSum.toFixed(2);
                             document.getElementById('savedinfo').innerText = saved.toFixed(2);

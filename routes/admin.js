@@ -285,7 +285,7 @@ router.get('/singleclient/:id', auth.done, role.admin, (req, res) => {
   Promise.all([getClient(id), getClientReceipts(id)])
   .then(([client, receipts]) => {
   //  console.log(receipts)
-    res.render('single_client', { data: receipts, name: client[0].name });
+    res.render('single_client', { data: receipts, name: client[0].name});
   })
   .catch((error) => {
     res.status(404).send(error.message);
@@ -329,7 +329,7 @@ router.get('/single-stats/:id', auth.done, role.admin, function(req, res, next) 
      Promise.all([getClient(id) /*, getClientReceipts(id)*/])
     .then(([client/*, receipts*/]) => {
     //  console.log(receipts)
-    return res.render('single_client_stats', {name: client[0].name, id: id }); 
+    return res.render('single_client_stats', {name: client[0].name, id: id , clientdisc: client[0].discount }); 
      
     })
     .catch((error) => {
