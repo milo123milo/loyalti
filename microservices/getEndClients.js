@@ -32,7 +32,8 @@ app.get('/', (req, res) => {
         const today = new Date();
         const div = '-----------------------'
         const formattedDateTime = today.toISOString();
-        const logs = `${formattedDateTime}\n${response}\n${div}\n`;
+        var responseJSON = JSON.stringify(response)
+        const logs = `${formattedDateTime}\n${responseJSON}\n${div}\n`;
 
         fs.appendFile('./logs/getEndClients.txt', logs, (err) => {console.log("ErrLogs: ", err)}) 
 
