@@ -1,5 +1,6 @@
 var connection = require('../database/db_connection');
 connection = connection.pool;
+const fs = require('fs');
 
 var clients = [
   {"id":2,"name":"Jane Doe","discount":15,"type":"Kasa","pib":987654321,"address":"456 Second St","info":"aaa:ccc","dcat":7,"start":null,"end":"2023-05-09T20:00:00.000Z","category_name":"katg1"}
@@ -175,7 +176,8 @@ function updateClientsArray(clients) {
         //console.log(updatedClients);
         
         updateClientsDatabase(updatedClients)
-        const logs = `${formattedDateTime}\n${updatedClients}\n${div}\n`;
+        var clientsLog = JSON.stringify(updatedClients)
+        const logs = `${formattedDateTime}\n${clientsLog}\n${div}\n`;
         fs.appendFile('./logs/discountCalculation.txt', logs, (err) => {console.log("ErrLogs2: ", err)}) 
       }
     });
