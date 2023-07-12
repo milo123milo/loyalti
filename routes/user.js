@@ -5,6 +5,26 @@ var pool = require('../database/queries')
 var receipt = require('./workers/getReceiptInfo')
 const axios = require('axios');
 
+function calculateTotalUnitPriceBeforeVAT(items, disc) {
+  let total = 0;
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    const unitPriceBeforeVAT = item.unitPriceBeforeVat;
+    const rebate = disc;
+
+    if (rebate !== null) {
+      const rebateAmount = (unitPriceBeforeVAT / 100) * rebate;
+      total += unitPriceBeforeVAT + rebateAmount;
+    } else {
+      total += unitPriceBeforeVAT;
+    }
+  }
+
+  return total;
+}
+
+
 function generateUniqueID() {
   const currentDate = new Date();
   const year = currentDate.getFullYear().toString().slice(-2);
@@ -101,6 +121,12 @@ router.post('/checkBill', auth.done, (req, res) => {
                 it.totalPrice = it.totalPrice + (it.totalPrice/100)*disc
                 // ****************
                 }
+                if(it.typeOfInvoice === "NONCASH"){
+                  
+                  it.sameTaxes[0].priceBeforeVat = calculateTotalUnitPriceBeforeVAT(it.items, disc)
+                  it.totalPrice = it.sameTaxes[0].priceBeforeVat + (it.sameTaxes[0].priceBeforeVat/100)*disc
+                  it.totalPrice = it.totalPrice + (it.totalPrice/100)*it.sameTaxes[0].vatRate
+                }
                 if(it.id === null){
                   it.id = generateUniqueID2()
                 }
@@ -113,6 +139,13 @@ router.post('/checkBill', auth.done, (req, res) => {
                   } else {
                     for (let i = 0; i < it.items.length; i++) {
                       const item = it.items[i];
+                      if(it.typeOfInvoice !== "NONCASH"){
+                        const rebateAmount = (item.unitPriceBeforeVAT / 100) * disc;
+                        item.unitPriceBeforeVAT += unitPriceBeforeVAT + rebateAmount;
+
+                        item.priceAfterVat = item.priceAfterVat + (item.priceAfterVat / 100)*item.vatRate
+
+                      }
 
                       pool.createReceiptItem(it.id, item.name, item.quantity, item.unit, item.unitPriceBeforeVat, item.priceBeforeVat, item.priceAfterVat, disc, item.priceAfterVat - (item.priceAfterVat / 100) * disc); //DISCOUNT
                     }
